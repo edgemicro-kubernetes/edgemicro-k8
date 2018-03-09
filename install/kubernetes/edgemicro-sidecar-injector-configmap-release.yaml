@@ -1,0 +1,62 @@
+# GENERATED FILE. Use with Kubernetes 1.9+
+# TO UPDATE, modify files in install/kubernetes/templates and run install/updateVersion.sh
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mgwsecret
+type: Opaque
+data:
+  mgorg: Z2FjY2VsZXJhdGU1
+  mgenv: dGVzdA==
+  mgkey: YTRhZTIzNTUwOTBjMGFiNzNjZjdiODEzYjRlM2ExOWRjZTU3NmM4NGFjMGE1OTQ1YzQ4NjZmMmI3OWFlYzcyOQ==
+  mgsecret: YTA1M2QyYTBkODQ5MjhkOGUzYzU5OTc2MTY4OThmOTkyYTcwY2M1YmVlMjlmODJmMTE3ZGUyOTViZDJkYjhkMw==
+---
+kind: ConfigMap
+metadata:
+  name: edgemicro-inject
+  namespace: edgemicro-system
+apiVersion: v1
+data:
+  config: |
+    policy: enabled
+    template: |-
+      containers:
+      - name: edge-microgateway
+        image: docker.io/rajeshm7910/microgateway:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: EDGEMICRO_ORG
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgorg
+        - name: EDGEMICRO_ENV
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgenv
+        - name: EDGEMICRO_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgkey
+        - name: EDGEMICRO_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgsecret
+        - name: EDGEMICRO_CONFIG_DIR
+          value: /home/microgateway/.edgemicro
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: edgemicro-proxy
+      - name: edgemicro-certs
+        secret:
+          optional: true
+          {{ if eq .Spec.ServiceAccountName "" -}}
+          secretName: edgemicro.default
+          {{ else -}}
+          secretName: {{ printf "edgemicro.%s" .Spec.ServiceAccountName }}
+          {{ end -}}

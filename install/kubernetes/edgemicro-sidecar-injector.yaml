@@ -1,0 +1,112 @@
+# GENERATED FILE. Use with Kubernetes 1.9+
+# TO UPDATE, modify files in install/kubernetes/templates and run install/updateVersion.sh
+apiVersion: v1
+kind: Service
+metadata:
+  name: edgemicro-sidecar-injector
+  namespace: edgemicro-system
+  labels:
+    edgemicro: sidecar-injector
+spec:
+  ports:
+  - name: https-webhook # optional
+    port: 443
+  selector:
+    edgemicro: sidecar-injector
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: edgemicro-sidecar-injector-service-account
+  namespace: edgemicro-system
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: edgemicro-sidecar-injector
+  namespace: edgemicro-system
+  labels:
+    edgemicro: sidecar-injector
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: edgemicro-sidecar-injector
+      labels:
+        edgemicro: sidecar-injector
+    spec:
+      serviceAccountName: edgemicro-sidecar-injector-service-account
+      containers:
+        - name: webhook
+          image: docker.io/rajeshm7910/sidecar_injector:0.6.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --tlsCertFile=/etc/istio/certs/cert.pem
+            - --tlsKeyFile=/etc/istio/certs/key.pem
+            - --injectConfig=/etc/istio/inject/config
+            - --meshConfig=/etc/istio/config/mesh
+            - --healthCheckInterval=2s
+            - --healthCheckFile=/health
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/istio/config
+            readOnly: true
+          - name: certs
+            mountPath: /etc/istio/certs
+            readOnly: true
+          - name: inject-config
+            mountPath: /etc/istio/inject
+            readOnly: true
+          livenessProbe:
+            exec:
+              command:
+                - /usr/local/bin/sidecar-injector
+                - probe
+                - --probe-path=/health
+                - --interval=2s
+            initialDelaySeconds: 4
+            periodSeconds: 4
+          readinessProbe:
+            exec:
+              command:
+                - /usr/local/bin/sidecar-injector
+                - probe
+                - --probe-path=/health
+                - --interval=2s
+            initialDelaySeconds: 4
+            periodSeconds: 4
+      volumes:
+      - name: config-volume
+        configMap:
+          name: edgemicro
+      - name: certs
+        secret:
+          secretName: sidecar-injector-certs
+      - name: inject-config
+        configMap:
+          name: edgemicro-inject
+          items:
+          - key: config
+            path: config
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: edgemicro-sidecar-injector
+webhooks:
+  - name: sidecar-injector.edgemicro.io
+    clientConfig:
+      service:
+        name: edgemicro-sidecar-injector
+        namespace: edgemicro-system
+        path: "/inject"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    namespaceSelector:
+      matchLabels:
+        edgemicro-injection: enabled
+---
