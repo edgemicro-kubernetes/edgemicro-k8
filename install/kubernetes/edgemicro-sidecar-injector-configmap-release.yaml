@@ -54,7 +54,6 @@ data:
               key: mgconfig
         - name: EDGEMICRO_CONFIG_DIR
           value: /home/microgateway/.edgemicro
-      name: test-volume
       volumes:
       - emptyDir:
           medium: Memory
