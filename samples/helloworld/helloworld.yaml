@@ -41,6 +41,6 @@ spec:
     spec:
       containers:
       - name: helloworld
-        image: docker.io/rajeshm7910/node-web-app
+        image: docker.io/edgemicrok8/helloworld
         imagePullPolicy: IfNotPresent
 ---
