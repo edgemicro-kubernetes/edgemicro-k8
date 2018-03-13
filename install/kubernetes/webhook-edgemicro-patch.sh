@@ -159,8 +159,8 @@ done
 export EDGEMICRO_ORG=$(echo -n "$org_name" | base64)
 export EDGEMICRO_ENV=$(echo -n "$env_name" | base64)
 export EDGEMICRO_KEY=$(echo -n "$key" | base64)
-export EDGEMICRO_SECRET=$(echo -n "$secret" | base64 | base64)
-export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64)
+export EDGEMICRO_SECRET=$(echo -n "$secret" | base64)
+export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64 | base64)
 
 
 echo $EDGEMICRO_ORG

@@ -22,6 +22,7 @@ metadata:
   labels:
     app: helloworld
 spec:
+  type: LoadBalancer
   ports:
   - port: 8081
     name: http
@@ -43,4 +44,6 @@ spec:
       - name: helloworld
         image: docker.io/edgemicrok8/helloworld
         imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
 ---

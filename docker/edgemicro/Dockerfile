@@ -1,12 +1,14 @@
 FROM node:slim
 
-RUN groupadd microgateway
-RUN useradd microgateway -g microgateway -m -d /home/microgateway
+RUN groupadd apigee
+RUN useradd apigee -g apigee -m -d /opt/apigee
 RUN npm install -g edgemicro
-RUN su - microgateway -c "edgemicro init"
+RUN su - apigee -c "edgemicro init"
 
-VOLUME /home/microgateway/.edgemicro/
-RUN chown microgateway:microgateway /home/microgateway/.edgemicro/*
+RUN mkdir -p /opt/apigee/logs
+VOLUME /opt/apigee/.edgemicro
+VOLUME /opt/apigee/logs
+RUN chown apigee:apigee /opt/apigee/.edgemicro/*
 COPY entrypoint.sh /tmp
 RUN chmod +x /tmp/entrypoint.sh
 # copy tls files if needed
