@@ -7,6 +7,7 @@ exec 2>&1
 
 echo "Log Location should be: [ $LOG_LOCATION ]"
 
+echo $EDGEMICRO_DECORATOR >> /tmp/test.txt
 echo $EDGEMICRO_ORG >> /tmp/test.txt
 echo $EDGEMICRO_ENV >> /tmp/test.txt
 echo $EDGEMICRO_KEY >> /tmp/test.txt
@@ -23,11 +24,6 @@ SERVICE_PORT_NAME=${SERVICE_NAME}_SERVICE_PORT
 SERVICE_PORT=${!SERVICE_PORT_NAME}
 echo $SERVICE_PORT >> /tmp/test.txt
 
-if [[ ${SERVICE_PORT} != "" ]]; then
-  echo "Service Port is not null. Apigee Specific Integration here"
-	#Its inserted as sidecar proxy so we need to setup an proxy in edge
-  /tmp/setup.sh $EDGEMICRO_ADMINEMAIL $EDGEMICRO_ADMINPASSWORD $EDGEMICRO_MGMTURL $EDGEMICRO_ORG $EDGEMICRO_ENV $POD_NAME $SERVICE_PORT $POD_NAME
-fi
 
 if [ ${EDGEMICRO_CONFIG} != "" ]; then
 	echo ${EDGEMICRO_CONFIG} >> /tmp/test.txt
