@@ -112,7 +112,7 @@ kube-system        Active    1d
 
 ```
 
-#### Deploying the app
+#### Deploying the helloworld app
 
 ```
 kubectl apply -f samples/helloworld/helloworld.yaml
@@ -126,15 +126,17 @@ helloworld-569d6565f9-lwrrv   2/2       Running   0          17m
 #### Accessing the services
 ```
 kubectl get services
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
+helloworld   LoadBalancer   10.19.252.245   35.188.24.156   8081:32296/TCP   24m
+kubernetes   ClusterIP      10.19.240.1     <none>          443/TCP          1d
 ```
 
-Wiat till Services show up
+Wiat till the External IP of Service shows up
 
 ```
 export GATEWAY_IP=$(kubectl describe services helloworld | grep "LoadBalancer Ingres" | cut -d ':' -f2 | tr -d "[:space:]")
 
 echo $GATEWAY_IP
-
 
 echo "Call with no API Key:"
 curl $GATEWAY_IP:8081/hello;echo
