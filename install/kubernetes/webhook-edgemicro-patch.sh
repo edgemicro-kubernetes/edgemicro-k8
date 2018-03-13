@@ -1,8 +1,10 @@
 #!/bin/bash
 
-#This is where we configure edge micro.
+red=`tput setaf 1`
+green=`tput setaf 2`
+blue=`tput setaf 4`
+reset=`tput sgr0`
 
-#!/bin/bash 
 usage() {
   echo 
   echo './edgemicro-hook.sh --private n|y -o org -e env -m mgmt_url -r runtime_api -u adminEmail -p adminPassword -v virtual_host'
@@ -81,34 +83,34 @@ done
 
 while [ "$adminEmail" = "" ]
 do
-  read  -p "Apigee username [required]:" adminEmail
+  read  -p "${blue}Apigee username [required]:${reset}" adminEmail
 done
 
 while [ "$adminPasswd" = "" ]
 do
-    read -s -p "Apigee password [required]:" adminPasswd
+    read -s -p "${blue}Apigee password [required]:${reset}" adminPasswd
     echo
 done
 
 while [ "$org_name" = "" ]
 do
-  read  -p "Apigee organization [required]:" org_name
+  read  -p "${blue}Apigee organization [required]:${reset}" org_name
 done
 
 while [ "$env_name" = "" ]
 do
-  read  -p "Apigee environment [required]:" env_name
+  read  -p "${blue}Apigee environment [required]:${reset}" env_name
 done
 
 while [ "$vhost_name" = "" ]
 do
-    read  -p "Virtual Host:" vhost_name
+    read  -p "${blue}Virtual Host:${reset}" vhost_name
 done
 
 
 while [ "$isPrivate" = "" ]
 do
-  read -p "Is this Private Cloud (\"n\",\"y\") [N/y]:" isPrivate
+  read -p "${blue}Is this Private Cloud (\"n\",\"y\") [N/y]:${reset}" isPrivate
   if [[ "$isPrivate" = "" ]]; then
      isPrivate="n"
   fi
@@ -117,12 +119,12 @@ done
 if [ "${isPrivate}" == "y" ]; then
   while [[ "$mgmt_url" = "" ]]
   do
-      read -p "Apigee Management Url:" mgmt_url
+      read -p "${blue}Apigee Management Url:${reset}" mgmt_url
   done
 
   while [[ "$api_base_path" = "" ]]
   do
-      read -p "Apigee API Endpoint Url:"  api_base_path
+      read -p "${blue}Apigee API Endpoint Url:${reset}"  api_base_path
   done
 fi
 
@@ -130,29 +132,36 @@ fi
 echo 'isPrivate '$isPrivate
 
 edgemicro init
-rm -fr /tmp/micro.txt
+rm -fr $PWD/install/kubernetes/micro.txt
 if [ "${isPrivate}" == "y" ]; then
   echo "isPrivate"
-  edgemicro private configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -r ${api_base_path} -m ${mgmt_url} -v ${vhost_name} > /tmp/micro.txt
+  edgemicro private configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -r ${api_base_path} -m ${mgmt_url} -v ${vhost_name} > $PWD/install/kubernetes/micro.txt
 else
   echo "It's an edge"
-  edgemicro configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -v ${vhost_name} > /tmp/micro.txt 
+  edgemicro configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -v ${vhost_name} > $PWD/install/kubernetes/micro.txt
 fi
 
 cp -fr ~/.edgemicro/${org_name}-${env_name}-config.yaml $PWD/install/kubernetes/config/
 
-export key=$(cat /tmp/micro.txt | grep key:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
-export secret=$(cat /tmp/micro.txt | grep secret:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
+export key=$(cat $PWD/install/kubernetes/micro.txt | grep key:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
+export secret=$(cat $PWD/install/kubernetes/micro.txt | grep secret:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
 
-echo key:$key
-echo secret:$secret
+echo ${red}key:$key
+echo ${red}secret:$secret${reset}
+rm -fr $PWD/install/kubernetes/micro.txt
 
-
-echo "Config file is Generated in $PWD/config directory. Please modify as desired"
+echo "${red}******************************************************************************************"
+echo "${red}Config file is Generated in $PWD/config directory."
+echo "${red}Please make changes as desired."
+echo "${red}*****************************************************************************************${reset}"
 
 while [ "${agree_to_decorate}" != "y" ]
 do
     read  -p "Do you agree to proceed(\"n\",\"y\") [N/y]:" agree_to_decorate
+    if [[ "${agree_to_decorate}" = "n" ]]; then
+        exit 0;
+    fi
+
 done
 
 #Export Al variables in Environment Variabe
@@ -163,11 +172,11 @@ export EDGEMICRO_SECRET=$(echo -n "$secret" | base64)
 export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64 | base64)
 
 
-echo $EDGEMICRO_ORG
-echo $EDGEMICRO_ENV
-echo $EDGEMICRO_KEY
-echo $EDGEMICRO_SECRET
-echo $EDGEMICRO_CONFIG
+#echo $EDGEMICRO_ORG
+#echo $EDGEMICRO_ENV
+#echo $EDGEMICRO_KEY
+#echo $EDGEMICRO_SECRET
+#echo $EDGEMICRO_CONFIG
 
 
 cp -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml  $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
@@ -179,3 +188,7 @@ sed -i.bak "s|\${PWD}|${PWD}|g" $PWD/install/kubernetes/edgemicro-sidecar-inject
 sed -i.bak "s|\${EDGEMICRO_CONFIG}|${EDGEMICRO_CONFIG}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 
 rm -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml.bak
+
+echo "${green}********************************************************************************************************"
+echo "${green}Updated config properties in install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml"
+echo "${green}********************************************************************************************************${reset}"

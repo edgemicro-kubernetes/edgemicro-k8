@@ -32,6 +32,7 @@ Install the base edgemicro
 kubectl apply -f install/kubernetes/edgemicro.yaml
 ./install/kubernetes/webhook-edgemicro-patch.sh
 ```
+The above step configures a edge micro
 
 Webhooks requires a signed cert/key pair. Use install/kubernetes/webhook-create-signed-cert.sh to generate a cert/key pair signed by the Kubernetes’ CA. The resulting cert/key file is stored as a Kubernetes secret for the sidecar injector webhook to consume.
 
