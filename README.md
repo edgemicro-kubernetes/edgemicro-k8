@@ -155,6 +155,8 @@ kubectl delete csr edgemicro-sidecar-injector.edgemicro-system
 kubectl label namespace default edgemicro-injection-
 rm -fr install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml
 kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+rm -fr install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+rm -fr install/kubernetes/config/*
 
 
 kubectl delete -f install/kubernetes/edgemicro.yaml
