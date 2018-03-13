@@ -126,6 +126,8 @@ if [ "${isPrivate}" == "y" ]; then
   do
       read -p "${blue}Apigee API Endpoint Url:${reset}"  api_base_path
   done
+else
+    mgmt_url="https://api.enterprise.apigee.com"
 fi
 
 
@@ -169,6 +171,9 @@ export EDGEMICRO_ORG=$(echo -n "$org_name" | base64)
 export EDGEMICRO_ENV=$(echo -n "$env_name" | base64)
 export EDGEMICRO_KEY=$(echo -n "$key" | base64)
 export EDGEMICRO_SECRET=$(echo -n "$secret" | base64)
+export EDGEMICRO_ADMINEMAIL=$(echo -n "$adminEmail" | base64)
+export EDGEMICRO_ADMINPASSWORD=$(echo -n "$adminPasswd" | base64)
+export EDGEMICRO_MGMTURL=$(echo -n "$mgmt_url" | base64)
 export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64 | base64)
 
 
@@ -184,6 +189,9 @@ sed -i.bak "s|\${EDGEMICRO_ORG}|${EDGEMICRO_ORG}|g" $PWD/install/kubernetes/edge
 sed -i.bak "s|\${EDGEMICRO_ENV}|${EDGEMICRO_ENV}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_KEY}|${EDGEMICRO_KEY}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_SECRET}|${EDGEMICRO_SECRET}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak "s|\${EDGEMICRO_MGMTURL}|${EDGEMICRO_MGMTURL}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak "s|\${EDGEMICRO_ADMINEMAIL}|${EDGEMICRO_ADMINEMAIL}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak "s|\${EDGEMICRO_ADMINPASSWORD}|${EDGEMICRO_ADMINPASSWORD}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${PWD}|${PWD}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_CONFIG}|${EDGEMICRO_CONFIG}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 
