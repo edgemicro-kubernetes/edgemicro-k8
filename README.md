@@ -32,8 +32,7 @@ kubectl apply -f install/kubernetes/edgemicro.yaml
 
 #### Configure Edge Micro
 
-You can configure edge micro by running this script below. This configures the edgemicro and generates the relevant configmap file. In case you have already configured edgemicro, you can pass your key,secret and config file as parameters.
-
+You can configure edge micro by running this script as given below. This configures the edgemicro and generate  a configmap file. In case you have already configured edgemicro, you can pass your key,secret and config file as parameters.
 
 ```
 ./install/kubernetes/webhook-edgemicro-patch.sh
@@ -134,7 +133,6 @@ edgemicro-system   Active    1d
 kube-public        Active    1d
 kube-system        Active    1d
 ```
-
 
 Label the default namespace with edgemicro-injection=enabled.
 
