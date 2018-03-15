@@ -121,6 +121,8 @@ NAME                                          READY     STATUS    RESTARTS   AGE
 edgemicro-sidecar-injector-78bffbd44b-bct2r   1/1       Running   0          14m
 ```
 
+#### Enabling Injection
+
 NamespaceSelector decides whether to run the webhook on an object based on whether the namespace for that object matches the selector (see https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors). The default webhook configuration uses edgemicro-injection=enabled.
 
 ```
@@ -133,7 +135,6 @@ kube-public        Active    1d
 kube-system        Active    1d
 ```
 
-#### Enabling Injection
 
 Label the default namespace with edgemicro-injection=enabled.
 
