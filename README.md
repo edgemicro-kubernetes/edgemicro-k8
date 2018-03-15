@@ -140,9 +140,9 @@ export GATEWAY_IP=$(kubectl describe services helloworld | grep "LoadBalancer In
 echo $GATEWAY_IP
 
 echo "Call with no API Key:"
-curl $GATEWAY_IP:8081/hello;echo
+curl $GATEWAY_IP:8081;echo
 echo "Call with API Key:"
-curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:8081/hello;echo
+curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:8081;echo
 ```
 
 
