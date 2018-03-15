@@ -131,7 +131,7 @@ helloworld-569d6565f9-lwrrv   1/1       Running   0          17m
 
 ```
 As you can see that helloworld pod came up with  only 1 containers. 
-The injection is not yet enabled. In the following section, we have enabled injector.
+The injection is not yet enabled. In the following section, we will enable injector.
 
 ```
 kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
