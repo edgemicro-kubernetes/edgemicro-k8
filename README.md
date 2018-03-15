@@ -24,9 +24,7 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 ### Automatic sidecar injection
 
 
-#### Installing the webhook
-
-Install the base edgemicro. This will create namespaces and cluster roles for edgemicro sidecar.
+Install the base edgemicro setup. This will create namespaces and cluster roles for edgemicro sidecar.
 
 ```
 kubectl apply -f install/kubernetes/edgemicro.yaml
