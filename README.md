@@ -120,6 +120,24 @@ NAME                                          READY     STATUS    RESTARTS   AGE
 edgemicro-sidecar-injector-78bffbd44b-bct2r   1/1       Running   0          14m
 ```
 
+#### Deploying the helloworld app
+
+```
+kubectl apply -f samples/helloworld/helloworld.yaml --namespace=default
+kubectl get pods --namespace=default
+
+NAME                          READY     STATUS    RESTARTS   AGE
+helloworld-569d6565f9-lwrrv   1/1       Running   0          17m
+
+```
+As you can see that helloworld pod came up with  only 1 containers. 
+The injection is not yet enabled. In the following section, we have enabled injector.
+
+```
+kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
+```
+
+
 #### Enabling Injection
 
 NamespaceSelector decides whether to run the webhook on an object based on whether the namespace for that object matches the selector (see https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors). The default webhook configuration uses edgemicro-injection=enabled.
@@ -134,7 +152,8 @@ kube-public        Active    1d
 kube-system        Active    1d
 ```
 
-Label the default namespace with edgemicro-injection=enabled.
+Label the default namespace with edgemicro-injection=enabled. In case you configured edgemicro with different namespace, specify your namespace.
+
 
 ```
 kubectl label namespace default edgemicro-injection=enabled
@@ -148,7 +167,7 @@ kube-system        Active    1d
 
 ```
 
-#### Deploying the helloworld app
+#### Deploying the helloworld app with Injection
 
 ```
 kubectl apply -f samples/helloworld/helloworld.yaml --namespace=default
@@ -181,6 +200,10 @@ curl $GATEWAY_IP:8081;echo
 echo "Call with API Key:"
 curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:8081;echo
 ```
+
+### Manual sidecar injection
+
+Coming soon ....
 
 ## Deleting the setup
 ```
