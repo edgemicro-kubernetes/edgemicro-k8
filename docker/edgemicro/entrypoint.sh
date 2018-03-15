@@ -23,15 +23,19 @@ echo $SERVICE_NAME >> /tmp/test.txt
 SERVICE_PORT_NAME=${SERVICE_NAME}_SERVICE_PORT
 SERVICE_PORT=${!SERVICE_PORT_NAME}
 echo $SERVICE_PORT >> /tmp/test.txt
+proxy_name=edgemicro_$POD_NAME
 
 
 if [ ${EDGEMICRO_CONFIG} != "" ]; then
 	echo ${EDGEMICRO_CONFIG} >> /tmp/test.txt
 	echo ${EDGEMICRO_CONFIG} | base64 --decode > /opt/apigee/.edgemicro/$EDGEMICRO_ORG-$EDGEMICRO_ENV-config.yaml
-	chown apigee:apigee /opt/apigee/.edgemicro/*
+	# Decorate Proxy with the proxy name
+  sed -i.bak s/proxy_name/${proxy_name}/g /tmp/proxies.yaml
+  sed -i.bak '/edgemicro:/r /tmp/proxies.yaml' /opt/apigee/.edgemicro/$EDGEMICRO_ORG-$EDGEMICRO_ENV-config.yaml
+  chown apigee:apigee /opt/apigee/.edgemicro/*
 fi
 
-su - apigee -m -c "cd /opt/apigee && edgemicro start -c /opt/apigee/.edgemicro &" 
+su - apigee -m -c "cd /opt/apigee && edgemicro start" 
 #edgemicro start &
 
 # SIGUSR1-handler
@@ -53,9 +57,4 @@ term_handler() {
 # on callback, kill the last background process, which is `tail -f /dev/null` and execute the specified handler
 trap 'kill ${!}; my_handler' SIGUSR1
 trap 'kill ${!}; term_handler' SIGTERM
-
-while true
-do
-        tail -f /dev/null & wait ${!}
-done
 

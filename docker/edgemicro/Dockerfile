@@ -10,6 +10,7 @@ VOLUME /opt/apigee/.edgemicro
 VOLUME /opt/apigee/logs
 RUN chown apigee:apigee /opt/apigee/.edgemicro/*
 COPY entrypoint.sh /tmp
+COPY proxies.yaml /tmp
 RUN chmod +x /tmp/entrypoint.sh
 # copy tls files if needed
 # COPY key.pem /root/.edgemicro

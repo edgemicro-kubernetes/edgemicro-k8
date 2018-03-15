@@ -177,13 +177,6 @@ export EDGEMICRO_MGMTURL=$(echo -n "$mgmt_url" | base64)
 export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64 | base64)
 
 
-#echo $EDGEMICRO_ORG
-#echo $EDGEMICRO_ENV
-#echo $EDGEMICRO_KEY
-#echo $EDGEMICRO_SECRET
-#echo $EDGEMICRO_CONFIG
-
-
 cp -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml  $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_ORG}|${EDGEMICRO_ORG}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_ENV}|${EDGEMICRO_ENV}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
