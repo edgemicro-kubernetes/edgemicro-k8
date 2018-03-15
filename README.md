@@ -9,9 +9,9 @@ This project brings native api management to the microservices.
 # Architecture
 ![Architecture](/docs/images/arch.png)
 
-### Getting Started
+## Getting Started
 
-#### Install nodejs and edgemicro
+### Install nodejs and edgemicro
 
 Refer here for more details : https://docs.apigee.com/api-platform/microgateway/2.5.x/installing-edge-microgateway 
 
@@ -237,6 +237,6 @@ gcloud beta container clusters delete edge-micro
 
 ```
 
-### References
+## References
 It uses istio-sidecar-proxy-injector and istio-init docker from istio project.
 
