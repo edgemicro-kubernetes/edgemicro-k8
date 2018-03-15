@@ -148,12 +148,13 @@ cp -fr ~/.edgemicro/${org_name}-${env_name}-config.yaml $PWD/install/kubernetes/
 export key=$(cat $PWD/install/kubernetes/micro.txt | grep key:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
 export secret=$(cat $PWD/install/kubernetes/micro.txt | grep secret:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
 
-echo ${red}key:$key
-echo ${red}secret:$secret${reset}
+echo ${blue}key:$key
+echo ${blue}secret:$secret${reset}
 rm -fr $PWD/install/kubernetes/micro.txt
 
 echo "${red}******************************************************************************************"
 echo "${red}Config file is Generated in $PWD/config directory."
+echo "${red}"
 echo "${red}Please make changes as desired."
 echo "${red}*****************************************************************************************${reset}"
 

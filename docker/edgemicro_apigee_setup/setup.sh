@@ -114,22 +114,23 @@ curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:applicat
 curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:application/x-www-form-urlencoded" ${mgmt_api}/v1/organizations/${org}/environments/${env_name}/apis/${proxy_name}/revisions/1/deployments
 
 #create product
-curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:application/json" ${mgmt_api}/v1/organizations/${org}/apiproducts -d \
-"{
-    \"name\" : \"${proxy_name}-product\",
-    \"displayName\": \"${proxy_name}-product\",
-    \"approvalType\": \"auto\",
-    \"attributes\": [
-    {
-      \"name\": \"access\",
-      \"value\": \"public\"
-    }
-    ],
-    \"description\": \"Edgemicro proxy\",
-    \"environments\": [ \"${env_name}\"],
-    \"proxies\": [\"edgemicro-auth\", \"$proxy_name\"],
-    \"quota\": \"\",
-    \"quotaInterval\": \"\",
-    \"quotaTimeUnit\": \"\",
-    \"scopes\": []
-}"
+
+#curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:application/json" ${mgmt_api}/v1/organizations/${org}/apiproducts -d \
+#"{
+#    \"name\" : \"${proxy_name}-product\",
+#    \"displayName\": \"${proxy_name}-product\",
+#    \"approvalType\": \"auto\",
+#    \"attributes\": [
+#    {
+#      \"name\": \"access\",
+#      \"value\": \"public\"
+#    }
+#    ],
+#    \"description\": \"Edgemicro proxy\",
+#    \"environments\": [ \"${env_name}\"],
+#    \"proxies\": [\"edgemicro-auth\", \"$proxy_name\"],
+#    \"quota\": \"\",
+#    \"quotaInterval\": \"\",
+#    \"quotaTimeUnit\": \"\",
+#    \"scopes\": []
+#}"
