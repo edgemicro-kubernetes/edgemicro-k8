@@ -26,13 +26,55 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 
 #### Installing the webhook
 
-Install the base edgemicro
+Install the base edgemicro. This will create namespaces and cluster roles for edgemicro sidecar.
 
 ```
 kubectl apply -f install/kubernetes/edgemicro.yaml
+```
+
+#### Configure Edge Micro
+
+You can configure edge micro by running this script below. This configures the edgemicro and generates the relevant configmap file. In case you have already configured edgemicro, you can pass your key,secret and config file as parameters.
+
+
+```
 ./install/kubernetes/webhook-edgemicro-patch.sh
 ```
-The above step configures a edge micro
+
+You can also pass the apigee edge details as parameters.
+
+```
+./install/kubernetes/webhook-edgemicro-patch.sh -h
+Usage: ./install/kubernetes/webhook-edgemicro-patch.sh [option...]
+
+   -o, --apigee_org           * Apigee Organization.
+   -e, --apigee_env           * Apigee Environment.
+   -v, --virtual_host         * Virtual Hosts with comma seperated values.The values are like default,secure.
+   -t, --private              y,if you are configuring Private Cloud. Default is n.
+   -m, --mgmt_url             Management API URL needed if its Private Cloud
+   -r, --api_base_path        API Base path needed if its Private Cloud
+   -u, --user                 * Apigee Admin Email
+   -p, --password             * Apigee Admin Password
+   -n, --namespace            Namespace where your application is deployed. Default is default
+   -k, --key                  * Edgemicro Key. If not specified it will generate.
+   -s, --secret               * Edgemicro Secret. If not specified it will generate.
+   -c, --config_file          * Specify the path of org-env-config.yaml. If not specified it will generate in ./install/kubernetes/config directory
+
+```
+For ex:
+```
+./install/kubernetes/webhook-edgemicro-patch.sh -t n -o gaccelerate5 -e test -v default -u <apigee email> -p <apigee-password>  -k <edgemicro key> -s <edgemicro secret> -c "/Users/rajeshmi/.edgemicro/gaccelerate5-test-config.yaml" -n apigateway
+
+```
+
+#### Install the sidecar injection configmap.
+The above step created a configmap file. Apply those changes in kubernetes cluster.
+
+```
+kubectl apply -f install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+```
+
+#### Install Webhook
 
 Webhooks requires a signed cert/key pair. Use install/kubernetes/webhook-create-signed-cert.sh to generate a cert/key pair signed by the Kubernetes’ CA. The resulting cert/key file is stored as a Kubernetes secret for the sidecar injector webhook to consume.
 
@@ -44,12 +86,7 @@ Note: Kubernetes CA approval requires permissions to create and approve CSR. See
     --namespace edgemicro-system \
     --secret sidecar-injector-certs
 ```
-Install the sidecar injection configmap.
 
-
-```
-kubectl apply -f install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-```
 
 Set the caBundle in the webhook install YAML that the Kubernetes api-server uses to invoke the webhook.
 
@@ -98,8 +135,9 @@ kube-public        Active    1d
 kube-system        Active    1d
 ```
 
+#### Enabling Injection
 
-Label the default namespace with edgemicro-injection=enabled
+Label the default namespace with edgemicro-injection=enabled.
 
 ```
 kubectl label namespace default edgemicro-injection=enabled
@@ -116,17 +154,19 @@ kube-system        Active    1d
 #### Deploying the helloworld app
 
 ```
-kubectl apply -f samples/helloworld/helloworld.yaml
-kubectl get pods
+kubectl apply -f samples/helloworld/helloworld.yaml --namespace=default
+kubectl get pods --namespace=default
 
 NAME                          READY     STATUS    RESTARTS   AGE
 helloworld-569d6565f9-lwrrv   2/2       Running   0          17m
 
 ```
+As you can see that helloworld pod came up with 2 containers.
+
 
 #### Accessing the services
 ```
-kubectl get services
+kubectl get services --namespace=default
 NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
 helloworld   LoadBalancer   10.19.252.245   35.188.24.156   8081:32296/TCP   24m
 kubernetes   ClusterIP      10.19.240.1     <none>          443/TCP          1d
@@ -145,10 +185,9 @@ echo "Call with API Key:"
 curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:8081;echo
 ```
 
-
 ## Deleting the setup
 ```
-kubectl delete -f samples/helloworld/helloworld.yaml
+kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
 kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml
 kubectl -n edgemicro-system delete secret sidecar-injector-certs
 kubectl delete csr edgemicro-sidecar-injector.edgemicro-system

@@ -1,9 +1,15 @@
 # GENERATED FILE. Use with Kubernetes 1.9+
 # TO UPDATE, modify files in install/kubernetes/templates and run install/updateVersion.sh
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${EDGEMICRO_NAMESPACE}
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: mgwsecret
+  namespace: ${EDGEMICRO_NAMESPACE}
 type: Opaque
 data:
   mgorg: ${EDGEMICRO_ORG}

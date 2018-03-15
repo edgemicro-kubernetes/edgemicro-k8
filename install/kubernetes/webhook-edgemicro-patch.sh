@@ -6,40 +6,31 @@ blue=`tput setaf 4`
 reset=`tput sgr0`
 
 usage() {
-  echo 
-  echo './edgemicro-hook.sh --private n|y -o org -e env -m mgmt_url -r runtime_api -u adminEmail -p adminPassword -v virtual_host'
+
+  echo "${blue}Usage: $0 [option...]" >&2
   echo
-  exit
-}
-lowercase(){
-    echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"
-}
-getOS() {
-  
-  OS=`lowercase \`uname\``
-  if [ "${OS}" == "windowsnt" ]; then
-      OS=windows
-  elif [ "${OS}" == "darwin" ]; then
-      OS=mac
-  else
-      OS=`uname`
-      if [ "${OS}" == "Linux" ] ; then
-          OS=$(cat /etc/*release | grep ^NAME | tr -d 'NAME="')
-          if [ "{$OS}" == "Ubuntu" ] ; then
-              OS=ubuntu
-          else 
-            OS=fedora
-          fi
-          OS=`lowercase $OS`
-      fi
-  fi
-  echo ${OS}
+  echo "   -o, --apigee_org           * Apigee Organization. "
+  echo "   -e, --apigee_env           * Apigee Environment. "
+  echo "   -v, --virtual_host         * Virtual Hosts with comma seperated values.The values are like default,secure. "
+  echo "   -t, --private              y,if you are configuring Private Cloud. Default is n."
+  echo "   -m, --mgmt_url             Management API URL needed if its Private Cloud"
+  echo "   -r, --api_base_path        API Base path needed if its Private Cloud"
+  echo "   -u, --user                 * Apigee Admin Email"
+  echo "   -p, --password             * Apigee Admin Password"
+  echo "   -n, --namespace            Namespace where your application is deployed. Default is default"
+  echo "   -k, --key                  * Edgemicro Key. If not specified it will generate."
+  echo "   -s, --secret               * Edgemicro Secret. If not specified it will generate."
+  echo "   -c, --config_file          * Specify the path of org-env-config.yaml. If not specified it will generate in ./install/kubernetes/config directory"
+
+  echo "${reset}"
+
+  exit 1
 }
 
 
 while [[ $# -gt 0 ]]; do
-key="$1"
-case $key in
+param="$1"
+case $param in
         -o|--apigee_org )           org_name=$2
                        shift # past argument
                        shift # past value
@@ -69,6 +60,22 @@ case $key in
                        shift # past value
                        ;;
         -t|--private ) isPrivate=$2
+                       shift # past argument
+                       shift # past value
+                       ;;
+        -n|--namespace ) namespace=$2
+                       shift # past argument
+                       shift # past value
+                       ;;
+        -s|--secret )     secret=$2
+                       shift # past argument
+                       shift # past value
+                       ;;
+        -k|--key )        key=$2
+                       shift # past argument
+                       shift # past value
+                       ;;
+        -c|--config_file )   config_file=$2
                        shift # past argument
                        shift # past value
                        ;;
@@ -104,7 +111,15 @@ done
 
 while [ "$vhost_name" = "" ]
 do
-    read  -p "${blue}Virtual Host:${reset}" vhost_name
+    read  -p "${blue}Virtual Host [required]:${reset}" vhost_name
+done
+
+while [ "$namespace" = "" ]
+do
+    read  -p "${blue}Namespace to deploy application [default]:${reset}" namespace
+    if [[ "$namespace" = "" ]]; then
+     namespace="default"
+    fi
 done
 
 
@@ -130,44 +145,79 @@ else
     mgmt_url="https://api.enterprise.apigee.com"
 fi
 
-
-echo 'isPrivate '$isPrivate
-
-edgemicro init
-rm -fr $PWD/install/kubernetes/micro.txt
-if [ "${isPrivate}" == "y" ]; then
-  echo "isPrivate"
-  edgemicro private configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -r ${api_base_path} -m ${mgmt_url} -v ${vhost_name} > $PWD/install/kubernetes/micro.txt
-else
-  echo "It's an edge"
-  edgemicro configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -v ${vhost_name} > $PWD/install/kubernetes/micro.txt
+if [ "$key" = "" ]; then
+  read -p "${blue}Edgemicro Key. Press Enter to generate:${reset}" key
+fi
+if [ "$secret" = "" ]; then
+  read -p "${blue}Edgemicro Secret. Press Enter to generate:${reset}" secret
+fi
+if [ "$config_file" = "" ]; then
+  read -p "${blue}Edgemicro org-env-config.yaml. Press Enter to generate:${reset}" config_file
 fi
 
-cp -fr ~/.edgemicro/${org_name}-${env_name}-config.yaml $PWD/install/kubernetes/config/
 
-export key=$(cat $PWD/install/kubernetes/micro.txt | grep key:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
-export secret=$(cat $PWD/install/kubernetes/micro.txt | grep secret:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
+generate_key="n"
 
-echo ${blue}key:$key
-echo ${blue}secret:$secret${reset}
-rm -fr $PWD/install/kubernetes/micro.txt
+if [[ -n "$key" && -n "$secret" && -n "$config_file" ]] ; then
+  generate_key="n"
+else  
+  if [[ -n "$key" || -n "$secret" || -n "$config_file" ]] ; then
+    echo
+    echo "${red}key,secret and config_file should all be provided together!!!.${reset}"
+    echo
+    usage
+  else
+    generate_key="y"
+  fi
+fi
 
-echo "${red}******************************************************************************************"
-echo "${red}Config file is Generated in $PWD/config directory."
-echo "${red}"
-echo "${red}Please make changes as desired."
-echo "${red}*****************************************************************************************${reset}"
 
-while [ "${agree_to_decorate}" != "y" ]
-do
-    read  -p "Do you agree to proceed(\"n\",\"y\") [N/y]:" agree_to_decorate
-    if [[ "${agree_to_decorate}" = "n" ]]; then
-        exit 0;
-    fi
+if [ "${generate_key}" == "y" ]; then
+  edgemicro init
+  rm -fr $PWD/install/kubernetes/micro.txt
+  if [ "${isPrivate}" == "y" ]; then
+    echo "Configure for Private Cloud"
+    edgemicro private configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -r ${api_base_path} -m ${mgmt_url} -v ${vhost_name} > $PWD/install/kubernetes/micro.txt
+  else
+    echo "Configure for Cloud"
+    edgemicro configure -o ${org_name} -e ${env_name} -u ${adminEmail} -p ${adminPasswd} -v ${vhost_name} > $PWD/install/kubernetes/micro.txt
+  fi
 
-done
+  cp -fr ~/.edgemicro/${org_name}-${env_name}-config.yaml $PWD/install/kubernetes/config/
+  export key=$(cat $PWD/install/kubernetes/micro.txt | grep key:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
+  export secret=$(cat $PWD/install/kubernetes/micro.txt | grep secret:| cut -d':' -f2 | sed -e 's/^[ \t]*//')
+
+  rm -fr $PWD/install/kubernetes/micro.txt
+
+  echo "${red}******************************************************************************************"
+  echo "${red}Config file is Generated in $PWD/config directory."
+  echo "${red}"
+  echo "${red}Please make changes as desired."
+  echo "${red}*****************************************************************************************${reset}"
+
+  while [ "${agree_to_decorate}" != "y" ]
+  do
+      read  -p "Do you agree to proceed(\"n\",\"y\") [N/y]:" agree_to_decorate
+      if [[ "${agree_to_decorate}" = "n" ]]; then
+          exit 0;
+      fi
+  done
+
+else
+  #copy the config file to config directory
+  cp -fr ${config_file} $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml
+fi
+
+echo
+echo Configuring Microgateway with
+echo
+echo key:${blue}$key${reset}
+echo secret:${blue}$secret${reset}
+echo config:${blue}$PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml${reset}
+echo
 
 #Export Al variables in Environment Variabe
+export EDGEMICRO_NAMESPACE=$(echo -n "$namespace")
 export EDGEMICRO_ORG=$(echo -n "$org_name" | base64)
 export EDGEMICRO_ENV=$(echo -n "$env_name" | base64)
 export EDGEMICRO_KEY=$(echo -n "$key" | base64)
@@ -179,6 +229,7 @@ export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_n
 
 
 cp -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml  $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak "s|\${EDGEMICRO_NAMESPACE}|${EDGEMICRO_NAMESPACE}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_ORG}|${EDGEMICRO_ORG}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_ENV}|${EDGEMICRO_ENV}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 sed -i.bak "s|\${EDGEMICRO_KEY}|${EDGEMICRO_KEY}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
