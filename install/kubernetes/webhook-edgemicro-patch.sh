@@ -229,16 +229,15 @@ export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_n
 
 
 cp -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml  $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_NAMESPACE}|${EDGEMICRO_NAMESPACE}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_ORG}|${EDGEMICRO_ORG}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_ENV}|${EDGEMICRO_ENV}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_KEY}|${EDGEMICRO_KEY}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_SECRET}|${EDGEMICRO_SECRET}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_MGMTURL}|${EDGEMICRO_MGMTURL}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_ADMINEMAIL}|${EDGEMICRO_ADMINEMAIL}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_ADMINPASSWORD}|${EDGEMICRO_ADMINPASSWORD}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${PWD}|${PWD}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak "s|\${EDGEMICRO_CONFIG}|${EDGEMICRO_CONFIG}|g" $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_NAMESPACE}/${EDGEMICRO_NAMESPACE}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ORG}/${EDGEMICRO_ORG}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ENV}/${EDGEMICRO_ENV}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_KEY}/${EDGEMICRO_KEY}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_SECRET}/${EDGEMICRO_SECRET}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_MGMTURL}/${EDGEMICRO_MGMTURL}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ADMINEMAIL}/${EDGEMICRO_ADMINEMAIL}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ADMINPASSWORD}/${EDGEMICRO_ADMINPASSWORD}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_CONFIG}/${EDGEMICRO_CONFIG}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 
 rm -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml.bak
 
