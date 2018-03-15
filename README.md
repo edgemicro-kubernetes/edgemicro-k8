@@ -1,15 +1,29 @@
-# edgemicro-k8
+#Edgemicro-k8
 
+##Overview
+
+This allows you to install Apigee Edge Microgateway as a sidecar gateway in front of your services deployed in kubernetes cluster. Developers faces challenges in exposing their microservices and they rely on API Management providers for exposining,securing and managing those apis.
+
+This project brings native api management to the microservices.
+
+Architecture
+![Architecture](/docs/images/arch.png)
 
 ### Getting Started
 
 #### Install nodejs and edgemicro
 
 Refer here for more details : https://docs.apigee.com/api-platform/microgateway/2.5.x/installing-edge-microgateway 
-Install edgemicro in Local machine - npm install edgemicro -g
+
+Install edgemicro in Local machine 
+```
+npm install edgemicro -g
+```
 
 
 ### Initialize Containers. 
+
+If you are using GKE, use these commands to initialize containers
 
 ```
 
@@ -223,5 +237,6 @@ gcloud beta container clusters delete edge-micro
 
 ```
 
-
+### References
+It uses istio-sidecar-proxy-injector and istio-init docker from istio project.
 
