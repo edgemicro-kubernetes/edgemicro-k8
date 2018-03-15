@@ -1,12 +1,12 @@
-#Edgemicro-k8
+# Edgemicro-k8
 
-##Overview
+## Overview
 
 This allows you to install Apigee Edge Microgateway as a sidecar gateway in front of your services deployed in kubernetes cluster. Developers faces challenges in exposing their microservices and they rely on API Management providers for exposining,securing and managing those apis.
 
 This project brings native api management to the microservices.
 
-Architecture
+# Architecture
 ![Architecture](/docs/images/arch.png)
 
 ### Getting Started
