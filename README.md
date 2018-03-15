@@ -215,7 +215,7 @@ kubectl label namespace default edgemicro-injection-
 rm -fr install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml
 kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
 rm -fr install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-rm -fr install/kubernetes/config/*
+rm -fr install/kubernetes/config/*config.yaml
 
 
 kubectl delete -f install/kubernetes/edgemicro.yaml
