@@ -208,7 +208,7 @@ kubernetes   ClusterIP      10.19.240.1     <none>          443/TCP          1d
 Wiat till the External IP of Service shows up
 
 ```
-export GATEWAY_IP=$(kubectl describe services helloworld | grep "LoadBalancer Ingres" | cut -d ':' -f2 | tr -d "[:space:]")
+export GATEWAY_IP=$(kubectl describe services helloworld  --namespace=default | grep "LoadBalancer Ingres" | cut -d ':' -f2 | tr -d "[:space:]")
 
 echo $GATEWAY_IP
 
