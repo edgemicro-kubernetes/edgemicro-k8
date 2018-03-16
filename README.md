@@ -40,7 +40,7 @@ npm install edgemicro -g
 ```
 
 
-### Initialize Containers. 
+### Initialize Kubernetes Cluster
 
 If you are using GKE, use these commands to initialize containers
 
@@ -54,7 +54,7 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 ```
 
 
-### Automatic sidecar injection
+### Automatic Sidecar Injection
 
 
 Install the base edgemicro setup. This will create namespaces and cluster roles for edgemicro sidecar.
@@ -63,7 +63,7 @@ Install the base edgemicro setup. This will create namespaces and cluster roles 
 kubectl apply -f install/kubernetes/edgemicro.yaml
 ```
 
-#### Install the sidecar injection configmap.
+#### Install Sidecar Injection Configmap.
 
 ```
 kubectl apply -f install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml
@@ -203,7 +203,7 @@ kube-system        Active    1d
 
 ```
 
-#### Deploying the helloworld app with Injection
+#### Deploy helloworld app with Injection
 
 ```
 kubectl apply -f samples/helloworld/helloworld.yaml --namespace=default
@@ -237,11 +237,11 @@ echo "Call with API Key:"
 curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:8081;echo
 ```
 
-### Manual sidecar injection
+### Manual Sidecar Injection
 
 Coming soon ....
 
-## Deleting the setup
+## Cleanup
 ```
 kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
 kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml
