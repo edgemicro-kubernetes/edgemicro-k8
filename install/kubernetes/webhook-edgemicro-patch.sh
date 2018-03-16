@@ -219,26 +219,26 @@ echo
 
 #Export Al variables in Environment Variabe
 export EDGEMICRO_NAMESPACE=$(echo -n "$namespace")
-export EDGEMICRO_ORG=$(echo -n "$org_name" | base64)
-export EDGEMICRO_ENV=$(echo -n "$env_name" | base64)
-export EDGEMICRO_KEY=$(echo -n "$key" | base64)
-export EDGEMICRO_SECRET=$(echo -n "$secret" | base64)
-export EDGEMICRO_ADMINEMAIL=$(echo -n "$adminEmail" | base64)
-export EDGEMICRO_ADMINPASSWORD=$(echo -n "$adminPasswd" | base64)
-export EDGEMICRO_MGMTURL=$(echo -n "$mgmt_url" | base64)
-export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64 | base64)
+export EDGEMICRO_ORG=$(echo -n "$org_name" | base64 | tr -d '\n')
+export EDGEMICRO_ENV=$(echo -n "$env_name" | base64 | tr -d '\n')
+export EDGEMICRO_KEY=$(echo -n "$key" | base64 | tr -d '\n')
+export EDGEMICRO_SECRET=$(echo -n "$secret" | base64 | tr -d '\n')
+export EDGEMICRO_ADMINEMAIL=$(echo -n "$adminEmail" | base64| tr -d '\n')
+export EDGEMICRO_ADMINPASSWORD=$(echo -n "$adminPasswd" | base64 | tr -d '\n')
+export EDGEMICRO_MGMTURL=$(echo -n "$mgmt_url" | base64 | tr -d '\n')
+export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64 | tr -d '\n' | base64  | tr -d '\n')
 
 
 cp -fr $PWD/install/kubernetes/edgemicro-config-namespace.yaml  $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_NAMESPACE}/${EDGEMICRO_NAMESPACE}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ORG}/${EDGEMICRO_ORG}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ENV}/${EDGEMICRO_ENV}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_KEY}/${EDGEMICRO_KEY}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_SECRET}/${EDGEMICRO_SECRET}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_MGMTURL}/${EDGEMICRO_MGMTURL}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ADMINEMAIL}/${EDGEMICRO_ADMINEMAIL}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ADMINPASSWORD}/${EDGEMICRO_ADMINPASSWORD}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_CONFIG}/${EDGEMICRO_CONFIG}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_NAMESPACE}/${EDGEMICRO_NAMESPACE}/g" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_ORG}/${EDGEMICRO_ORG}/g" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_ENV}/${EDGEMICRO_ENV}/g" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_KEY}/${EDGEMICRO_KEY}/" install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_SECRET}/${EDGEMICRO_SECRET}/" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_MGMTURL}/${EDGEMICRO_MGMTURL}/g" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_ADMINEMAIL}/${EDGEMICRO_ADMINEMAIL}/g" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_ADMINPASSWORD}/${EDGEMICRO_ADMINPASSWORD}/g" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak "s/\${EDGEMICRO_CONFIG}/${EDGEMICRO_CONFIG}/g" $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
 
 rm -fr $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml.bak
 
