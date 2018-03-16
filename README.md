@@ -8,7 +8,17 @@ This project brings native api management to the microservices development on ku
 # Architecture
 ![Architecture](/docs/images/arch.png)
 
+
 ## Getting Started
+
+###Prerequisites
+
+Kubernetes version 1.9 or greater
+Kubernetes CLI kubectl v1.9 or greater
+
+- Minikube - Coming soon ...
+- GKE - Tested
+- Openshift - Coming soon ...
 
 ### Install Edgemicro
 
