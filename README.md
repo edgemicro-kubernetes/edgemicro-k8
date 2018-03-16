@@ -109,10 +109,9 @@ NAME                          READY     STATUS    RESTARTS   AGE
 helloworld-569d6565f9-lwrrv   1/1       Running   0          17m
 
 ```
-As you can see that helloworld pod came up with  only 1 containers. 
-The injection is not yet enabled. The following sections enables the injection.
+As you can see that helloworld pod came up with  only 1 container. The injection is not yet enabled. 
 
-Delete the existing deployment
+Delete this deployment
 
 ```
 kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
@@ -120,8 +119,7 @@ kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
 
 #### Edgemicro Configuration Profile 
 
-You can configure multiple configuration profile of edge micro by associating them with a namespace.
-Create edgemicro configuration profile by running the script below
+Creae a edgemicro configuration and associate it with a kubernetes namespace. You can create different configuration profiles based on your apigee edge settings or edge micro configuration settings.
 
 ```
 ./install/kubernetes/webhook-edgemicro-patch.sh
@@ -152,10 +150,10 @@ For ex:
 ./install/kubernetes/webhook-edgemicro-patch.sh -t n -o gaccelerate5 -e test -v default -u <apigee email> -p <apigee-password>  -k <edgemicro key> -s <edgemicro secret> -c "/Users/rajeshmi/.edgemicro/gaccelerate5-test-config.yaml" -n default
 
 ```
-This creates config file in install/kubernetes/edgemicro-config-namespace-bundle.yaml
+Run command below to inject the edgemicro config profile in kubernetes.
 
 ```
-	kubectl apply -f install/kubernetes/edgemicro-config-namespace-bundle.yaml
+kubectl apply -f install/kubernetes/edgemicro-config-namespace-bundle.yaml
 ```
 
 #### Enable Injection
