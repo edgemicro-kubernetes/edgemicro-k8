@@ -27,7 +27,7 @@ If you are using GKE, use these commands to initialize containers
 
 ```
 
-gcloud container clusters create edge-micro  --cluster-version=1.9.2-gke.1 --zone us-central1-a --project edge-apigee --num-nodes 4
+gcloud container clusters create edge-micro  --cluster-version=1.9.2-gke.1 --zone us-central1-a --project edge-apigee --num-nodes 4 -m n1-standard-2
 
 gcloud container clusters get-credentials edge-micro --zone us-central1-a --project edge-apigee
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
