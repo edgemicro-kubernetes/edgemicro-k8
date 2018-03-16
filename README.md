@@ -11,7 +11,7 @@ This project brings native api management to the microservices development on ku
 
 ## Getting Started
 
-###Prerequisites
+### Prerequisites
 
 Kubernetes version 1.9 or greater
 Kubernetes CLI kubectl v1.9 or greater
