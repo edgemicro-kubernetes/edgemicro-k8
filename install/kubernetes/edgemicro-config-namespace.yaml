@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${EDGEMICRO_NAMESPACE}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mgwsecret
+  namespace: ${EDGEMICRO_NAMESPACE}
+type: Opaque
+data:
+  mgorg: ${EDGEMICRO_ORG}
+  mgenv: ${EDGEMICRO_ENV}
+  mgkey: ${EDGEMICRO_KEY}
+  mgsecret: ${EDGEMICRO_SECRET}
+  mgconfig: ${EDGEMICRO_CONFIG}
+  mgmgmturl: ${EDGEMICRO_MGMTURL}
+  mgadminemail: ${EDGEMICRO_ADMINEMAIL}
+  mgadminpassword: ${EDGEMICRO_ADMINPASSWORD}
+---

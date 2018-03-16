@@ -44,45 +44,10 @@ Install the base edgemicro setup. This will create namespaces and cluster roles 
 kubectl apply -f install/kubernetes/edgemicro.yaml
 ```
 
-#### Configure Edge Micro
-
-You can configure edge micro by running this script as given below. This configures the edgemicro and generate  a configmap file. In case you have already configured edgemicro, you can pass your key,secret and config file as parameters.
-
-```
-./install/kubernetes/webhook-edgemicro-patch.sh
-```
-
-You can also pass parameters for non interactive usage. Refer to help for usage.
-
-```
-./install/kubernetes/webhook-edgemicro-patch.sh -h
-Usage: ./install/kubernetes/webhook-edgemicro-patch.sh [option...]
-
-   -o, --apigee_org           * Apigee Organization.
-   -e, --apigee_env           * Apigee Environment.
-   -v, --virtual_host         * Virtual Hosts with comma seperated values.The values are like default,secure.
-   -t, --private              y,if you are configuring Private Cloud. Default is n.
-   -m, --mgmt_url             Management API URL needed if its Private Cloud
-   -r, --api_base_path        API Base path needed if its Private Cloud
-   -u, --user                 * Apigee Admin Email
-   -p, --password             * Apigee Admin Password
-   -n, --namespace            Namespace where your application is deployed. Default is default
-   -k, --key                  * Edgemicro Key. If not specified it will generate.
-   -s, --secret               * Edgemicro Secret. If not specified it will generate.
-   -c, --config_file          * Specify the path of org-env-config.yaml. If not specified it will generate in ./install/kubernetes/config directory
-
-```
-For ex:
-```
-./install/kubernetes/webhook-edgemicro-patch.sh -t n -o gaccelerate5 -e test -v default -u <apigee email> -p <apigee-password>  -k <edgemicro key> -s <edgemicro secret> -c "/Users/rajeshmi/.edgemicro/gaccelerate5-test-config.yaml" -n apigateway
-
-```
-
 #### Install the sidecar injection configmap.
-The above step created a configmap file. Apply those changes in kubernetes cluster.
 
 ```
-kubectl apply -f install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+kubectl apply -f install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml
 ```
 
 #### Install Webhook
@@ -134,7 +99,7 @@ NAME                                          READY     STATUS    RESTARTS   AGE
 edgemicro-sidecar-injector-78bffbd44b-bct2r   1/1       Running   0          14m
 ```
 
-#### Deploying the helloworld app
+#### Deploy helloworld app
 
 ```
 kubectl apply -f samples/helloworld/helloworld.yaml --namespace=default
@@ -145,14 +110,55 @@ helloworld-569d6565f9-lwrrv   1/1       Running   0          17m
 
 ```
 As you can see that helloworld pod came up with  only 1 containers. 
-The injection is not yet enabled. In the following section, we will enable injector.
+The injection is not yet enabled. The following sections enables the injection.
+
+Delete the existing deployment
 
 ```
 kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
 ```
 
+#### Edgemicro Configuration Profile 
 
-#### Enabling Injection
+You can configure multiple configuration profile of edge micro by associating them with a namespace.
+Create edgemicro configuration profile by running the script below
+
+```
+./install/kubernetes/webhook-edgemicro-patch.sh
+```
+
+You can also pass parameters for non interactive usage. Refer usage instructions.
+
+```
+./install/kubernetes/webhook-edgemicro-patch.sh -h
+Usage: ./install/kubernetes/webhook-edgemicro-patch.sh [option...]
+
+   -o, --apigee_org           * Apigee Organization.
+   -e, --apigee_env           * Apigee Environment.
+   -v, --virtual_host         * Virtual Hosts with comma seperated values.The values are like default,secure.
+   -t, --private              y,if you are configuring Private Cloud. Default is n.
+   -m, --mgmt_url             Management API URL needed if its Private Cloud
+   -r, --api_base_path        API Base path needed if its Private Cloud
+   -u, --user                 * Apigee Admin Email
+   -p, --password             * Apigee Admin Password
+   -n, --namespace            Namespace where your application is deployed. Default is default
+   -k, --key                  * Edgemicro Key. If not specified it will generate.
+   -s, --secret               * Edgemicro Secret. If not specified it will generate.
+   -c, --config_file          * Specify the path of org-env-config.yaml. If not specified it will generate in ./install/kubernetes/config directory
+
+```
+For ex:
+```
+./install/kubernetes/webhook-edgemicro-patch.sh -t n -o gaccelerate5 -e test -v default -u <apigee email> -p <apigee-password>  -k <edgemicro key> -s <edgemicro secret> -c "/Users/rajeshmi/.edgemicro/gaccelerate5-test-config.yaml" -n default
+
+```
+This creates config file in install/kubernetes/edgemicro-config-namespace-bundle.yaml
+
+```
+	kubectl apply -f install/kubernetes/edgemicro-config-namespace-bundle.yaml
+```
+
+#### Enable Injection
 
 NamespaceSelector decides whether to run the webhook on an object based on whether the namespace for that object matches the selector (see https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors). The default webhook configuration uses edgemicro-injection=enabled.
 
@@ -167,7 +173,6 @@ kube-system        Active    1d
 ```
 
 Label the default namespace with edgemicro-injection=enabled. In case you configured edgemicro with different namespace, specify your namespace.
-
 
 ```
 kubectl label namespace default edgemicro-injection=enabled
@@ -226,11 +231,12 @@ kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.y
 kubectl -n edgemicro-system delete secret sidecar-injector-certs
 kubectl delete csr edgemicro-sidecar-injector.edgemicro-system
 kubectl label namespace default edgemicro-injection-
-rm -fr install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml
-kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-rm -fr install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-rm -fr install/kubernetes/config/*config.yaml
+kubectl delete -f install/kubernetes/edgemicro-config-namespace-bundle.yaml
+kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml
 
+rm -fr  install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml
+rm -fr  install/kubernetes/config/*config.yaml
+rm -fr  install/kubernetes/edgemicro-config-namespace-bundle.yaml
 
 kubectl delete -f install/kubernetes/edgemicro.yaml
 gcloud beta container clusters delete edge-micro

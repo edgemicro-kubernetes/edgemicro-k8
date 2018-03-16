@@ -88,6 +88,15 @@ done
 
 #Validation
 
+while [ "$namespace" = "" ]
+do
+    read  -p "${blue}Namespace to deploy application [default]:${reset}" namespace
+    if [[ "$namespace" = "" ]]; then
+     namespace="default"
+    fi
+done
+
+
 while [ "$adminEmail" = "" ]
 do
   read  -p "${blue}Apigee username [required]:${reset}" adminEmail
@@ -112,14 +121,6 @@ done
 while [ "$vhost_name" = "" ]
 do
     read  -p "${blue}Virtual Host [required]:${reset}" vhost_name
-done
-
-while [ "$namespace" = "" ]
-do
-    read  -p "${blue}Namespace to deploy application [default]:${reset}" namespace
-    if [[ "$namespace" = "" ]]; then
-     namespace="default"
-    fi
 done
 
 
@@ -228,19 +229,19 @@ export EDGEMICRO_MGMTURL=$(echo -n "$mgmt_url" | base64)
 export EDGEMICRO_CONFIG=$(cat $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml | base64 | base64)
 
 
-cp -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml  $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_NAMESPACE}/${EDGEMICRO_NAMESPACE}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ORG}/${EDGEMICRO_ORG}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ENV}/${EDGEMICRO_ENV}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_KEY}/${EDGEMICRO_KEY}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_SECRET}/${EDGEMICRO_SECRET}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_MGMTURL}/${EDGEMICRO_MGMTURL}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ADMINEMAIL}/${EDGEMICRO_ADMINEMAIL}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_ADMINPASSWORD}/${EDGEMICRO_ADMINPASSWORD}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
-sed -i.bak s/\${EDGEMICRO_CONFIG}/${EDGEMICRO_CONFIG}/g $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml
+cp -fr $PWD/install/kubernetes/edgemicro-config-namespace.yaml  $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_NAMESPACE}/${EDGEMICRO_NAMESPACE}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ORG}/${EDGEMICRO_ORG}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ENV}/${EDGEMICRO_ENV}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_KEY}/${EDGEMICRO_KEY}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_SECRET}/${EDGEMICRO_SECRET}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_MGMTURL}/${EDGEMICRO_MGMTURL}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ADMINEMAIL}/${EDGEMICRO_ADMINEMAIL}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_ADMINPASSWORD}/${EDGEMICRO_ADMINPASSWORD}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
+sed -i.bak s/\${EDGEMICRO_CONFIG}/${EDGEMICRO_CONFIG}/g $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml
 
-rm -fr $PWD/install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml.bak
+rm -fr $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml.bak
 
 echo "${green}********************************************************************************************************"
-echo "${green}Updated config properties in install/kubernetes/edgemicro-sidecar-injector-configmap-release-bundle.yaml"
+echo "${green}Updated config properties in install/kubernetes/edgemicro-config-namespace-bundle.yaml"
 echo "${green}********************************************************************************************************${reset}"
