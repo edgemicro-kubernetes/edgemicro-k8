@@ -13,11 +13,20 @@ This project brings native api management to the microservices development on ku
 
 ### Prerequisites
 
-Kubernetes version 1.9 or greater
-Kubernetes CLI kubectl v1.9 or greater
+- Kubernetes version 1.9 or greater
+- Kubernetes CLI kubectl v1.9 or greater
 
 - Minikube - Coming soon ...
-- GKE - Tested
+- GKE
+   - Retrieve your credentials for kubectl (replace <cluster-name> with the name of the cluster you want to use, and <zone> with the zone where that cluster is located):
+     ```
+     gcloud container clusters get-credentials <cluster-name> --zone <zone> --project <project-name>
+     ```
+   - Grant cluster admin permissions to the current user (admin permissions are required to create the necessary RBAC rules for Istio):
+     ```
+     kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
+     ```
+
 - Openshift - Coming soon ...
 
 ### Install Edgemicro
