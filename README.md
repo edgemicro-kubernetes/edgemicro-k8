@@ -12,7 +12,7 @@ This project brings native api management to the microservices development on ku
 
 ### Install Edgemicro
 
-Refer here for more details about installing edgemicro : https://docs.apigee.com/api-platform/microgateway/2.5.x/installing-edge-microgateway.
+Refer [here](https://docs.apigee.com/api-platform/microgateway/2.5.x/installing-edge-microgateway) for more details about installing edgemicro.
 
 ```
 npm install edgemicro -g
