@@ -52,7 +52,7 @@ You can configure edge micro by running this script as given below. This configu
 ./install/kubernetes/webhook-edgemicro-patch.sh
 ```
 
-You can also pass the apigee edge details as parameters.
+You can also pass parameters for non interactive usage. Refer to help for usage.
 
 ```
 ./install/kubernetes/webhook-edgemicro-patch.sh -h
