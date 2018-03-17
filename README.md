@@ -216,7 +216,7 @@ helloworld-569d6565f9-lwrrv   2/2       Running   0          17m
 As you can see that helloworld pod came up with 2 containers.
 
 
-#### Accessing the services
+#### Accessing Service
 ```
 kubectl get services --namespace=default
 NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE

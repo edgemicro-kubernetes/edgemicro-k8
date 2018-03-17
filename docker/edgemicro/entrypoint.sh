@@ -35,13 +35,19 @@ if [ ${EDGEMICRO_CONFIG} != "" ]; then
   chown apigee:apigee /opt/apigee/.edgemicro/*
 fi
 
-su - apigee -m -c "cd /opt/apigee && edgemicro start" 
+commandString="cd /opt/apigee && export EDGEMICRO_DECORATOR=$EDGEMICRO_DECORATOR && edgemicro start -o $EDGEMICRO_ORG -e $EDGEMICRO_ENV -k $EDGEMICRO_KEY -s $EDGEMICRO_SECRET &"
+echo $commandString
+su - apigee -m -c "$commandString" 
 #edgemicro start &
 
 # SIGUSR1-handler
 my_handler() {
   echo "my_handler" >> /tmp/entrypoint.log
   su - apigee -m -c "cd /opt/apigee && edgemicro stop"
+  #Attempt deleting the proxy here
+  curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/environments/${EDGEMICRO_ENV}/apis/${proxy_name}/revisions/1/deployments
+  curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apis/${proxy_name}
+
   #edgemicro stop 
 }
 
@@ -49,6 +55,10 @@ my_handler() {
 term_handler() {
   echo "term_handler" >> /tmp/entrypoint.log
   su - apigee -m -c "cd /opt/apigee && edgemicro stop"
+
+  curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/environments/${EDGEMICRO_ENV}/apis/${proxy_name}/revisions/1/deployments
+  curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apis/${proxy_name}
+
   #edgemicro stop
   exit 143; # 128 + 15 -- SIGTERM
 }
@@ -58,3 +68,7 @@ term_handler() {
 trap 'kill ${!}; my_handler' SIGUSR1
 trap 'kill ${!}; term_handler' SIGTERM
 
+while true
+do
+        tail -f /dev/null & wait ${!}
+done
