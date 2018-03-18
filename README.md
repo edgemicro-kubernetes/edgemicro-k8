@@ -119,7 +119,7 @@ NAME                                          READY     STATUS    RESTARTS   AGE
 edgemicro-sidecar-injector-78bffbd44b-bct2r   1/1       Running   0          14m
 ```
 
-#### Configure edgemicro nginx ingress controller
+#### Configure Nginx Ingress controller
 
 if you are using GKE confgure nginx controller with following command
 
