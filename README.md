@@ -61,6 +61,7 @@ Install the base edgemicro setup. This will create namespaces and cluster roles 
 
 ```
 kubectl apply -f install/kubernetes/edgemicro.yaml
+
 ```
 
 #### Install Sidecar Injection Configmap.
@@ -117,6 +118,24 @@ kubectl get pods -n edgemicro-system
 NAME                                          READY     STATUS    RESTARTS   AGE
 edgemicro-sidecar-injector-78bffbd44b-bct2r   1/1       Running   0          14m
 ```
+
+#### Configure edgemicro nginx ingress controller
+
+if you are using GKE confgure nginx controller with following command
+
+```
+kubectl apply -f install/kubernetes/edgemicro-nginx-gke.yaml
+```
+To check if the ingress controller pods have started, run the following command:
+
+```
+kubectl get pods --all-namespaces -l app=edgemicro-ingress --watch
+```
+
+Once the operator pods are running, you can cancel the above command by typing Ctrl+C. Now, you are ready to create your first ingress.
+
+**** Please note that there should not be any other nginx controller running. 
+
 
 #### Deploy helloworld app
 
@@ -231,7 +250,6 @@ kubectl get ing -o wide
 NAME      HOSTS     ADDRESS         PORTS     AGE
 gateway   *         35.202.94.111   80        39s
 ```
-
 
 ```
 export GATEWAY_IP=$(kubectl describe services helloworld  --namespace=default | grep "LoadBalancer Ingres" | cut -d ':' -f2 | tr -d "[:space:]")
