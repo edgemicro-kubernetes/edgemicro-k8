@@ -66,6 +66,8 @@ metadata:
   namespace: edgemicro-system
   labels:
     app: edgemicro-ingress
+data:
+  ssl-redirect: "false"
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -216,6 +218,27 @@ subjects:
 
 ---
 
+kind: Service
+apiVersion: v1
+metadata:
+  name: edgemicro-ingress
+  namespace: edgemicro-system
+  labels:
+    app: edgemicro-ingress
+spec:
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  selector:
+    app: edgemicro-ingress
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  - name: https
+    port: 443
+    targetPort: https
+
+---
 
 
 apiVersion: extensions/v1beta1
@@ -285,24 +308,4 @@ spec:
 
 ---
 
-kind: Service
-apiVersion: v1
-metadata:
-  name: edgemicro-ingress
-  namespace: edgemicro-system
-  labels:
-    app: edgemicro-ingress
-spec:
-  externalTrafficPolicy: Local
-  type: LoadBalancer
-  selector:
-    app: edgemicro-ingress
-  ports:
-  - name: http
-    port: 80
-    targetPort: http
-  - name: https
-    port: 443
-    targetPort: https
 
----
