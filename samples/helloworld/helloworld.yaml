@@ -5,10 +5,12 @@ metadata:
   labels:
     app: helloworld
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 8081
     name: http
+    targetPort: 8081
+    protocol: TCP
   selector:
     app: helloworld
 ---
@@ -29,4 +31,23 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8081
+---
+###########################################################################
+# Ingress resource (gateway)
+##########################################################################
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: helloworld
+          servicePort: 8081
 ---

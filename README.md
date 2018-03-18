@@ -220,11 +220,18 @@ As you can see that helloworld pod came up with 2 containers.
 ```
 kubectl get services --namespace=default
 NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
-helloworld   LoadBalancer   10.19.252.245   35.188.24.156   8081:32296/TCP   24m
+helloworld   LoadBalancer   10.19.252.245   <nine>.         8081:32296/TCP   24m
 kubernetes   ClusterIP      10.19.240.1     <none>          443/TCP          1d
 ```
 
-Wiat till the External IP of Service shows up
+Get the ingress ip address
+
+```
+kubectl get ing -o wide
+NAME      HOSTS     ADDRESS         PORTS     AGE
+gateway   *         35.202.94.111   80        39s
+```
+
 
 ```
 export GATEWAY_IP=$(kubectl describe services helloworld  --namespace=default | grep "LoadBalancer Ingres" | cut -d ':' -f2 | tr -d "[:space:]")
@@ -232,9 +239,9 @@ export GATEWAY_IP=$(kubectl describe services helloworld  --namespace=default | 
 echo $GATEWAY_IP
 
 echo "Call with no API Key:"
-curl $GATEWAY_IP:8081;echo
+curl $GATEWAY_IP:80;echo
 echo "Call with API Key:"
-curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:8081;echo
+curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80;echo
 ```
 
 ### Manual Sidecar Injection
