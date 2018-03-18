@@ -280,6 +280,7 @@ rm -fr  install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml
 rm -fr  install/kubernetes/config/*config.yaml
 rm -fr  install/kubernetes/edgemicro-config-namespace-bundle.yaml
 
+kubectl delete -f install/kubernetes/edgemicro-nginx-gke.yaml
 kubectl delete -f install/kubernetes/edgemicro.yaml
 gcloud beta container clusters delete edge-micro
 
