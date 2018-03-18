@@ -2,12 +2,6 @@
 # Edgemicro Ingress controller
 ###############################
 
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: edgemicro-system
-
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
