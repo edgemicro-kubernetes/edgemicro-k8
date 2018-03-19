@@ -54,15 +54,41 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 ```
 
 
-### Automatic Sidecar Injection
+### Install Base Edgemicro Setup
 
 
-Install the base edgemicro setup. This will create namespaces and cluster roles for edgemicro sidecar.
+Install the base edgemicro setup. This will create edgemicro-system namespaces and create cluster roles for edgemicro sidecar gateway.
 
 ```
 kubectl apply -f install/kubernetes/edgemicro.yaml
 
 ```
+
+#### Configure Nginx Ingress controller
+
+if you are using GKE confgure nginx controller with following command. 
+
+```
+kubectl apply -f install/kubernetes/edgemicro-nginx-gke.yaml
+```
+To check if the ingress controller pods have started, run the following command:
+
+```
+kubectl get pods --all-namespaces -l app=edgemicro-ingress --watch
+```
+
+This takes some time (a minute or two) and may go through cycles of Error and Restarts. Once the operator pods are running, you can cancel the above command by typing Ctrl+C. 
+
+**** Please note that there should not be any other nginx controller running. 
+
+
+### Manual Sidecar Injection
+
+Coming soon ....
+
+
+### Automatic Sidecar Injection
+
 
 #### Install Sidecar Injection Configmap.
 
@@ -119,24 +145,6 @@ NAME                                          READY     STATUS    RESTARTS   AGE
 edgemicro-sidecar-injector-78bffbd44b-bct2r   1/1       Running   0          14m
 ```
 
-#### Configure Nginx Ingress controller
-
-if you are using GKE confgure nginx controller with following command
-
-```
-kubectl apply -f install/kubernetes/edgemicro-nginx-gke.yaml
-```
-To check if the ingress controller pods have started, run the following command:
-
-```
-kubectl get pods --all-namespaces -l app=edgemicro-ingress --watch
-```
-
-Once the operator pods are running, you can cancel the above command by typing Ctrl+C. Now, you are ready to create your first ingress.
-
-**** Please note that there should not be any other nginx controller running. 
-
-
 #### Deploy helloworld app
 
 ```
@@ -147,7 +155,7 @@ NAME                          READY     STATUS    RESTARTS   AGE
 helloworld-569d6565f9-lwrrv   1/1       Running   0          17m
 
 ```
-As you can see that helloworld pod came up with  only 1 container. The injection is not yet enabled. 
+As you can see that helloworld pod came up with only 1 container. The injection is not yet enabled. 
 
 Delete this deployment
 
@@ -236,6 +244,9 @@ As you can see that helloworld pod came up with 2 containers.
 
 
 #### Accessing Service
+
+kubectl get services -n default
+
 ```
 NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
 helloworld   NodePort    10.19.251.15   <none>        8081:30723/TCP   1m
@@ -262,9 +273,9 @@ echo "Call with API Key:"
 curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80;echo
 ```
 
-### Manual Sidecar Injection
+### Running Bookinfo sample
+[BookInfo](/docs/bookinfo.md)
 
-Coming soon ....
 
 ## Cleanup
 ```
