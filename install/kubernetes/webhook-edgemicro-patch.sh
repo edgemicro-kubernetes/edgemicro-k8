@@ -206,7 +206,7 @@ if [ "${generate_key}" == "y" ]; then
 
 else
   #copy the config file to config directory
-  cp -fr ${config_file} $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml
+  cat ${config_file} > $PWD/install/kubernetes/config/${org_name}-${env_name}-config.yaml
 fi
 
 echo
@@ -243,5 +243,5 @@ sed -i.bak "s/\${EDGEMICRO_CONFIG}/${EDGEMICRO_CONFIG}/g" $PWD/install/kubernete
 rm -fr $PWD/install/kubernetes/edgemicro-config-namespace-bundle.yaml.bak
 
 echo "${green}********************************************************************************************************"
-echo "${green}Updated config properties in install/kubernetes/edgemicro-config-namespace-bundle.yaml"
+echo "${blue}kubectl apply -f install/kubernetes/edgemicro-config-namespace-bundle.yaml"
 echo "${green}********************************************************************************************************${reset}"

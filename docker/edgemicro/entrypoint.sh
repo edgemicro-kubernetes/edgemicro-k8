@@ -10,8 +10,8 @@ echo "Log Location should be: [ $LOG_LOCATION ]"
 echo $EDGEMICRO_DECORATOR >> /tmp/test.txt
 echo $EDGEMICRO_ORG >> /tmp/test.txt
 echo $EDGEMICRO_ENV >> /tmp/test.txt
-echo $EDGEMICRO_KEY >> /tmp/test.txt
-echo $EDGEMICRO_SECRET >> /tmp/test.txt
+#echo $EDGEMICRO_KEY >> /tmp/test.txt
+#echo $EDGEMICRO_SECRET >> /tmp/test.txt
 echo $EDGEMICRO_MGMTURL >> /tmp/test.txt
 echo $EDGEMICRO_ADMINEMAIL >> /tmp/test.txt
 echo $EDGEMICRO_ADMINPASSWORD >> /tmp/test.txt
@@ -35,8 +35,15 @@ if [ ${EDGEMICRO_CONFIG} != "" ]; then
   chown apigee:apigee /opt/apigee/.edgemicro/*
 fi
 
+#Always override the port with 8000 for now.
+sed -i.back "s/port.*/port: 8000/g" /opt/apigee/.edgemicro/$EDGEMICRO_ORG-$EDGEMICRO_ENV-config.yaml
+
+if [[ -n "$EDGEMICRO_OVERRIDE_edgemicro_config_change_poll_interval" ]]; then
+  sed -i.back "s/config_change_poll_interval.*/config_change_poll_interval: $EDGEMICRO_OVERRIDE_edgemicro_config_change_poll_interval/g" /opt/apigee/.edgemicro/$EDGEMICRO_ORG-$EDGEMICRO_ENV-config.yaml
+fi
+
 commandString="cd /opt/apigee && export EDGEMICRO_DECORATOR=$EDGEMICRO_DECORATOR && edgemicro start -o $EDGEMICRO_ORG -e $EDGEMICRO_ENV -k $EDGEMICRO_KEY -s $EDGEMICRO_SECRET &"
-echo $commandString
+#echo $commandString
 su - apigee -m -c "$commandString" 
 #edgemicro start &
 
