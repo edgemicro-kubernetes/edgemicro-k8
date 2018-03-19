@@ -115,25 +115,32 @@ curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:applicat
 
 #create product
 
-#curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:application/json" ${mgmt_api}/v1/organizations/${org}/apiproducts -d \
-#"{
-#    \"name\" : \"${proxy_name}-product\",
-#    \"displayName\": \"${proxy_name}-product\",
-#    \"approvalType\": \"auto\",
-#    \"attributes\": [
-#    {
-#      \"name\": \"access\",
-#      \"value\": \"public\"
-#    }
-#    ],
-#    \"description\": \"Edgemicro proxy\",
-#    \"environments\": [ \"${env_name}\"],
-#    \"proxies\": [\"edgemicro-auth\", \"$proxy_name\"],
-#    \"quota\": \"\",
-#    \"quotaInterval\": \"\",
-#    \"quotaTimeUnit\": \"\",
-#    \"scopes\": []
-#}"
+if [[ -n "$EDGEMICRO_CREATE_PRODUCT"  && "$EDGEMICRO_CREATE_PRODUCT" == "1" ]]; then
+  
+  curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:application/json" ${mgmt_api}/v1/organizations/${org}/apiproducts -d \
+  "{
+      \"name\" : \"${proxy_name}-product\",
+      \"displayName\": \"${proxy_name}-product\",
+      \"approvalType\": \"auto\",
+      \"attributes\": [
+      {
+        \"name\": \"access\",
+        \"value\": \"public\"
+      }
+      ],
+      \"description\": \"Edgemicro proxy\",
+      \"environments\": [ \"${env_name}\"],
+      \"proxies\": [\"edgemicro-auth\", \"$proxy_name\"],
+      \"apiResources\": [ \"/\", \"/**\"],
+      \"quota\": \"\",
+      \"quotaInterval\": \"\",
+      \"quotaTimeUnit\": \"\",
+      \"scopes\": []
+  }"
+
+fi
+
+
 
 #while true
 #do
