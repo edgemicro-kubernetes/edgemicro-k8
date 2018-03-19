@@ -24,6 +24,7 @@ SERVICE_PORT_NAME=${SERVICE_NAME}_SERVICE_PORT
 SERVICE_PORT=${!SERVICE_PORT_NAME}
 echo $SERVICE_PORT >> /tmp/test.txt
 proxy_name=edgemicro_$POD_NAME
+product_name=$proxy_name-product
 
 
 if [ ${EDGEMICRO_CONFIG} != "" ]; then
@@ -52,10 +53,11 @@ my_handler() {
   echo "my_handler" >> /tmp/entrypoint.log
   su - apigee -m -c "cd /opt/apigee && edgemicro stop"
   #Attempt deleting the proxy here
+  curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apiproducts/${product_name}
   curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/environments/${EDGEMICRO_ENV}/apis/${proxy_name}/revisions/1/deployments
   curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apis/${proxy_name}
 
-  #edgemicro stop 
+  #edgemicro stop
 }
 
 # SIGTERM-handler
@@ -63,6 +65,7 @@ term_handler() {
   echo "term_handler" >> /tmp/entrypoint.log
   su - apigee -m -c "cd /opt/apigee && edgemicro stop"
 
+  curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apiproducts/${product_name}
   curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/environments/${EDGEMICRO_ENV}/apis/${proxy_name}/revisions/1/deployments
   curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apis/${proxy_name}
 
