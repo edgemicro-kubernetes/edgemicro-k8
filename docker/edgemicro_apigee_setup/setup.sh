@@ -134,3 +134,8 @@ curl -v -X POST -u $APIGEE_ADMIN_EMAIL:$APIGEE_ADMINPW -H "Content-Type:applicat
 #    \"quotaTimeUnit\": \"\",
 #    \"scopes\": []
 #}"
+
+#while true
+#do
+#        tail -f /dev/null & wait ${!}
+#done

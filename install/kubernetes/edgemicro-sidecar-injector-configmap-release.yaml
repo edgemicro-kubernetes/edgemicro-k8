@@ -161,6 +161,12 @@ data:
           requests:
             memory: "1024Mi"
             cpu: "0.5"
+        volumeMounts:
+        - mountPath: /etc/istio/proxy
+          name: edgemicro-proxy
+        - mountPath: /etc/certs/
+          name: edgemicro-certs
+          readOnly: true
       volumes:
       - emptyDir:
           medium: Memory
@@ -169,7 +175,7 @@ data:
         secret:
           optional: true
           {{ if eq .Spec.ServiceAccountName "" -}}
-          secretName: edgemicro.default
+          secretName: istio.default
           {{ else -}}
-          secretName: {{ printf "edgemicro.%s" .Spec.ServiceAccountName }}
+          secretName: {{ printf "istio.%s" .Spec.ServiceAccountName }}
           {{ end -}}
