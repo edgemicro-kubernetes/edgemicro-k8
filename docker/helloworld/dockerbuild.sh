@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ $# -ne 1 ]; then 
@@ -8,7 +7,6 @@ if [ $# -ne 1 ]; then
 fi
 
 version=$1
-
-docker build -t edgemicro:$version $DIR
-docker tag edgemicro:$version edgemicrok8/edgemicro:$version
-docker push edgemicrok8/edgemicro:$version
+docker build -t helloworld:$version $DIR
+docker tag helloworld:$version edgemicrok8/helloworld:$version
+docker push edgemicrok8/helloworld:$version

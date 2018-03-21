@@ -5,21 +5,21 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-echo $EDGEMICRO_ORG >> /tmp/test.txt
-echo $EDGEMICRO_ENV >> /tmp/test.txt
-echo $EDGEMICRO_KEY >> /tmp/test.txt
-echo $EDGEMICRO_SECRET >> /tmp/test.txt
-echo $EDGEMICRO_MGMTURL >> /tmp/test.txt
-echo $EDGEMICRO_ADMINEMAIL >> /tmp/test.txt
-echo $EDGEMICRO_ADMINPASSWORD >> /tmp/test.txt
-echo $POD_NAME >> /tmp/test.txt
-echo $POD_NAMESPACE >> /tmp/test.txt
-echo $INSTANCE_IP >> /tmp/test.txt
+#echo $EDGEMICRO_ORG >> /tmp/test.txt
+#echo $EDGEMICRO_ENV >> /tmp/test.txt
+#echo $EDGEMICRO_KEY >> /tmp/test.txt
+#echo $EDGEMICRO_SECRET >> /tmp/test.txt
+#echo $EDGEMICRO_MGMTURL >> /tmp/test.txt
+#echo $EDGEMICRO_ADMINEMAIL >> /tmp/test.txt
+#echo $EDGEMICRO_ADMINPASSWORD >> /tmp/test.txt
+#echo $POD_NAME >> /tmp/test.txt
+#echo $POD_NAMESPACE >> /tmp/test.txt
+#echo $INSTANCE_IP >> /tmp/test.txt
 SERVICE_NAME=`echo "${SERVICE_NAME}" | tr '[a-z]' '[A-Z]'`
-echo $SERVICE_NAME >> /tmp/test.txt
+#echo $SERVICE_NAME >> /tmp/test.txt
 SERVICE_PORT_NAME=${SERVICE_NAME}_SERVICE_PORT
 SERVICE_PORT=${!SERVICE_PORT_NAME}
-echo $SERVICE_PORT >> /tmp/test.txt
+#echo $SERVICE_PORT >> /tmp/test.txt
 
 
 APIGEE_ADMIN_EMAIL=$EDGEMICRO_ADMINEMAIL

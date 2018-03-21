@@ -18,16 +18,16 @@ usage() {
 
 IP_RANGES_INCLUDE=""
 
-#ENVOY_PORT=8000
-#ENVOY_UID=1001
+#EDGEMICRO_PORT=8000
+#EDGEMICRO_UID=1001
 
 while getopts ":p:u:e:i:h" opt; do
   case ${opt} in
     p)
-      ENVOY_PORT=${OPTARG}
+      EDGEMICRO_PORT=${OPTARG}
       ;;
     u)
-      ENVOY_UID=${OPTARG}
+      EDGEMICRO_UID=${OPTARG}
       ;;
     i)
       IP_RANGES_INCLUDE=${OPTARG}
@@ -44,7 +44,7 @@ while getopts ":p:u:e:i:h" opt; do
   esac
 done
 
-if [[ -z "${ENVOY_PORT-}" ]] || [[ -z "${ENVOY_UID-}" ]]; then
+if [[ -z "${EDGEMICRO_PORT-}" ]] || [[ -z "${EDGEMICRO_UID-}" ]]; then
   echo "Please set both -p and -u parameters"
   usage
   exit 1
@@ -74,7 +74,7 @@ iptables -t nat -A EDGEMICRO_OUTPUT -o lo ! -d 127.0.0.1/32 -j EDGEMICRO_REDIREC
 
 # Avoid infinite loops. Don't redirect Envoy traffic directly back to
 # Envoy for non-loopback traffic.
-iptables -t nat -A EDGEMICRO_OUTPUT -m owner --uid-owner ${ENVOY_UID} -j RETURN   -m comment --comment "edgemicro/bypass-envoy"
+iptables -t nat -A EDGEMICRO_OUTPUT -m owner --uid-owner ${EDGEMICRO_UID} -j RETURN   -m comment --comment "edgemicro/bypass-envoy"
 
 # Skip redirection for Envoy-aware applications and
 # container-to-container traffic both of which explicitly use

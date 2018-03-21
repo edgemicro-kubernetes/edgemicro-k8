@@ -9,7 +9,7 @@ This project brings native api management to the microservices development on ku
 ![Architecture](/docs/images/arch.png)
 
 
-## Getting Started
+## Quick Start
 
 ### Prerequisites
 
@@ -64,9 +64,7 @@ kubectl apply -f install/kubernetes/edgemicro.yaml
 
 ```
 
-#### Configure Nginx Ingress controller
-
-if you are using GKE confgure nginx controller with following command. 
+if you are using GKE, confgure nginx ingress controller.
 
 ```
 kubectl apply -f install/kubernetes/edgemicro-nginx-gke.yaml

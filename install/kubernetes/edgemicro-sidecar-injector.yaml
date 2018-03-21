@@ -38,7 +38,7 @@ spec:
       serviceAccountName: edgemicro-sidecar-injector-service-account
       containers:
         - name: webhook
-          image: docker.io/edgemicrok8/sidecar_injector:0.6.0
+          image: docker.io/edgemicrok8/sidecar_injector:latest
           imagePullPolicy: IfNotPresent
           args:
             - --tlsCertFile=/etc/istio/certs/cert.pem
