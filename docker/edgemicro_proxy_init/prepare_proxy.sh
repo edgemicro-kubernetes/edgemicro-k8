@@ -54,7 +54,7 @@ fi
 # Create a new chain for redirecting inbound and outbound traffic to
 # the common Envoy port.
 iptables -t nat -N EDGEMICRO_REDIRECT                                             -m comment --comment "edgemicro/redirect-common-chain"
-iptables -t nat -A EDGEMICRO_REDIRECT -p tcp -j REDIRECT --to-port ${ENVOY_PORT}  -m comment --comment "edgemicro/redirect-to-envoy-port"
+iptables -t nat -A EDGEMICRO_REDIRECT -p tcp -j REDIRECT --to-port ${EDGEMICRO_PORT}  -m comment --comment "edgemicro/redirect-to-envoy-port"
 
 # Redirect all inbound traffic to Envoy.
 iptables -t nat -A PREROUTING -j EDGEMICRO_REDIRECT                               -m comment --comment "edgemicro/install-edgemicro-prerouting"
@@ -93,6 +93,7 @@ if [ "${IP_RANGES_INCLUDE}" != "" ]; then
 else
     iptables -t nat -A EDGEMICRO_OUTPUT -j RETURN                                 -m comment --comment "edgemicro/bypass-default-outbound"
 fi
+
 
 
 exit 0
