@@ -1,6 +1,10 @@
 ## Running Bookinfo sample
 
+It deploys the same bookinfo istio sample but adds a edgemicro with a spike arrest policy. This examples uses automatic sidecar injector to inject edgemicro in bookinfo sample. 
+
 ### Create a Edgemicro configuration profile edgemicro
+
+Create a edgemicro configuration profile for bookinfo namespace. If you have not created bookinfo namespace, this step creates configuration to create a namespace.
 
 ```
 ./install/kubernetes/webhook-edgemicro-patch.sh -n bookinfo
@@ -83,6 +87,9 @@ kubectl apply -f install/kubernetes/edgemicro-config-namespace-bundle.yaml
 ```
 
 #### Enable Injection
+
+At this step enable injection for bookinfo namespace.
+
 ```
 kubectl label namespace bookinfo edgemicro-injection=enabled
 kubectl get namespace -L edgemicro-injection
@@ -133,7 +140,7 @@ NAME      HOSTS     ADDRESS         PORTS     AGE
 gateway   *         35.188.95.103   80        6m
 ```
 
-Go to the browser and hit http://gateway-external-address and hit couple of times. You should see that spikearrest gets engaged.
+Go to the browser and hit http://gateway-external-address/productpage and hit couple of times. You should see spikearrest gets engaged.
 
 
 ### Celeberate

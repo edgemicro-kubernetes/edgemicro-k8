@@ -116,16 +116,19 @@ If you do not have the edgemicro-sidecar-injector installed, you must use edgemi
 kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-sec> -user=<apigee-user> -pass=<apigee-password> -conf=<file path of org-env-config.yaml> -svc=<your-app-spec>.yaml)
 ```
 
-
-
 ### Helloworld sample
 [here](/docs/helloworld.md)
+
+### Automatic Sidecar Injection
+[here](/docs/automatic_sidecar.md)
 
 ### Running Bookinfo sample
 [here](/docs/bookinfo.md)
 
-### Automatic Sidecar Injection
-[here](/docs/automatic_sidecar.md)
+
+### Assumptions
+- It uses labels app in services to identify the deployment. Please ensure you define your services with label app. Refer to examples in helloworld and bookinfo example.
+- At this point, it also expects service port and container port to be same. Refer examples for more details.
 
 
 ## Uninstall edgemicrok8
