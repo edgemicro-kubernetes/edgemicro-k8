@@ -194,7 +194,7 @@ curl -H 'x-api-key:your-apigee-api-key' $GATEWAY_IP:80;echo
 kubectl label namespace default edgemicro-injection-
 ```
 
-## Uninstall istio setup with Sidecar injection
+## Uninstall Edgemicrok8 setup with Sidecar injection
 ```
 kubectl delete -f samples/helloworld/helloworld.yaml --namespace=default
 kubectl delete -f install/kubernetes/edgemicro-sidecar-injector-with-ca-bundle.yaml

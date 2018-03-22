@@ -131,7 +131,7 @@ kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=
 - At this point, it also expects service port and container port to be same. Refer examples for more details.
 
 
-## Uninstall edgemicrok8
+## Uninstall EdgemicroK8
 ```
 kubectl delete -f install/kubernetes/edgemicro-nginx-gke.yaml
 kubectl delete -f install/kubernetes/edgemicro.yaml
