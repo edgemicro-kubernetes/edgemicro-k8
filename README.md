@@ -117,13 +117,6 @@ kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=
 ```
 
 
-## Uninstall edgemicrok8
-```
-kubectl delete -f install/kubernetes/edgemicro-nginx-gke.yaml
-kubectl delete -f install/kubernetes/edgemicro.yaml
-gcloud beta container clusters delete edge-micro
-
-```
 
 ### Helloworld sample
 [here](/docs/helloworld.md)
@@ -133,6 +126,15 @@ gcloud beta container clusters delete edge-micro
 
 ### Automatic Sidecar Injection
 [here](/docs/automatic_sidecar.md)
+
+
+## Uninstall edgemicrok8
+```
+kubectl delete -f install/kubernetes/edgemicro-nginx-gke.yaml
+kubectl delete -f install/kubernetes/edgemicro.yaml
+gcloud beta container clusters delete edge-micro
+
+```
 
 ## References
 It uses istio-sidecar-proxy-injector and istio-init docker from istio project.
