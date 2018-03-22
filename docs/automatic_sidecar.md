@@ -181,11 +181,12 @@ echo $GATEWAY_IP
 
 echo "Call with no API Key:"
 curl $GATEWAY_IP:80;
-
+```
 Go to Edge UI and you can see a API and API Product created. Create a app and associate with the product created. Get the api key of the app created.
 
+```
 echo "Call with API Key:"
-curl -H 'x-api-key:your-apigee-api-key' $GATEWAY_IP:80;echo
+curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80;echo
 ```
 
 ### Disable injection

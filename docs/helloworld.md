@@ -40,8 +40,19 @@ export GATEWAY_IP=$(kubectl describe ing gateway --namespace default | grep "Add
 echo $GATEWAY_IP
 
 echo "Call with no API Key:"
-curl $GATEWAY_IP:80;echo
-Go to Edge UI and Associate with a API Products and Developer Key
+curl $GATEWAY_IP:80;
+```
+Go to Edge UI and you can see a API and API Product created. Create a app and associate with the product created. Get the api key of the app created.
+
+```
 echo "Call with API Key:"
 curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80;echo
 ```
+
+### Uninstalling app
+
+```
+kubectl delete -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-sec> -user=<apigee-user> -pass=<apigee-password> -conf=<file path of org-env-config.yaml> -svc=samples/helloworld/helloworld.yaml)
+```
+
+

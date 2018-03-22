@@ -127,7 +127,7 @@ kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=
 
 
 ### Assumptions
-- It uses labels app in services to identify the deployment. Please ensure you define your services with label app. Refer to examples in helloworld and bookinfo example.
+- It uses app labels in services to identify the deployment. Please ensure you define your services with label app. Refer to examples in helloworld and bookinfo example.
 - At this point, it also expects service port and container port to be same. Refer examples for more details.
 
 
