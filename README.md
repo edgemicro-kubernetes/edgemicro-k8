@@ -102,7 +102,7 @@ system:
         ```
         edgemicro configure -o <org> -e <env> -u <user> -p <password>
         ```
-    - Note down the key and secret generated. This also generates the Key file.
+    - Note down the key and secret generated. It also generates org-env-config.yaml file.
 
 #### Deploying Application
 
