@@ -38,9 +38,9 @@ This project brings native api management to the microservices development on ku
         curl -L https://git.io/getLatestEdgemicroK8 | sh - 
       ```
 2. It extracts the package in the current location with a folder named edgemicro-k8-<os>-<arch>
-  * Installation .yaml files for Kubernetes in install/
-  * Sample applications in samples/
-  * The edgemicroctl client binary in the bin/ directory. edgemicroctl is used when manually injecting Edgemicro as a sidecar gateay.
+    * Installation .yaml files for Kubernetes in install/
+    * Sample applications in samples/
+    * The edgemicroctl client binary in the bin/ directory. edgemicroctl is used when manually injecting Edgemicro as a sidecar gateay.
 
 3.  Change directory to edgemicro-k8 package. For example, if the package is edgemicro-k8-0.1-darwinamd64
     ```
