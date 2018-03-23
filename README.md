@@ -83,6 +83,8 @@ system:
     edgemicro-ingress           LoadBalancer   10.19.247.156  35.224.24.13   80:30176/TCP,443:32325/TCP   2h
     edgemicro-sidecar-injector  ClusterIP      10.19.240.55   <none>         443/TCP                      2h
     ```
+    ** If you have not enabled sidecar injector, you will not see edgemicro-sidecar-injector.Refer Automatic injection section to enable sidecar injector.
+    
 3. Verify all pods are running
     ```
     kubectl get pods -n edgemicro-system
