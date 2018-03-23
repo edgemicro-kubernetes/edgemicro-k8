@@ -45,7 +45,7 @@ This project brings native api management to the microservices development on ku
 4.  Add the edgemicroctl client to your PATH. For example, run the following command on a MacOS or Linux
 system:
     ```
-    export PATH=$PATH:$PWD/bin
+    export PATH=$PWD/bin:$PATH
     ```
 5. Install the base edgemicro-k8 setup. This will create edgemicro-system namespaces and create cluster roles for edgemicro sidecar gateway.
 
