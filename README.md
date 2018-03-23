@@ -15,6 +15,7 @@ This project brings native api management to the microservices development on ku
 
 * Kubernetes version 1.9 or greater
 * Kubernetes CLI kubectl v1.9 or greater
+* Cluster wih atleast 3 nodes with 2 vCPU each.
 * Minikube - Coming soon ...
 * GKE
    - Retrieve your credentials for kubectl (replace <cluster-name> with the name of the cluster you want to use, and <zone> with the zone where that cluster is located):
