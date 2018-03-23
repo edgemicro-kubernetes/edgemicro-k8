@@ -18,6 +18,9 @@ This project brings native api management to the microservices development on ku
 * Cluster wih atleast 3 nodes with 2 vCPU each.
 * Minikube - Coming soon ...
 * GKE
+   - Create container cluster in GKE with atleast 3 node and machine size having 2 VCPU each.
+   ![GKE](/docs/images/gke-container.png)
+
    - Retrieve your credentials for kubectl (replace <cluster-name> with the name of the cluster you want to use, and <zone> with the zone where that cluster is located):
      ```
      gcloud container clusters get-credentials <cluster-name> --zone <zone> --project <project-name>
