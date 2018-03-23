@@ -144,7 +144,9 @@ for os in "${release_os[@]}";
 	sed -i.bak s/latest/$VERSION/g tmp/edgemicro-k8-${RELEASE_VERSION}-${os}/install/kubernetes/edgemicro-sidecar-injector.yaml
 
 	rm -fr tmp/edgemicro-k8-${RELEASE_VERSION}-${os}/install/kubernetes/edgemicro-sidecar-injector-configmap-release.yaml.bak
-	curl $edgemicroctlDist/${os}/edgemicroctl -o   tmp/edgemicro-k8-${RELEASE_VERSION}-${os}/bin/edgemicroctl
+	rm -fr tmp/edgemicro-k8-${RELEASE_VERSION}-${os}/install/kubernetes/edgemicro-sidecar-injector.yaml.bak
+  
+  curl $edgemicroctlDist/${os}/edgemicroctl -o   tmp/edgemicro-k8-${RELEASE_VERSION}-${os}/bin/edgemicroctl
 	chmod +x tmp/edgemicro-k8-${RELEASE_VERSION}-${os}/bin/edgemicroctl
 
 	cd tmp
