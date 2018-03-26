@@ -25,7 +25,7 @@ This project brings native api management to the microservices development on ku
      ```
      gcloud container clusters get-credentials <cluster-name> --zone <zone> --project <project-name>
      ```
-   - Grant cluster admin permissions to the current user (admin permissions are required to create the necessary RBAC rules for Istio):
+   - Grant cluster admin permissions to the current user (admin permissions are required to create the necessary RBAC rules for edgemicrok8):
      ```
      kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
      ```
@@ -84,7 +84,7 @@ system:
     edgemicro-sidecar-injector  ClusterIP      10.19.240.55   <none>         443/TCP                      2h
     ```
     ** If you have not enabled sidecar injector, you will not see edgemicro-sidecar-injector.Refer Automatic injection section to enable sidecar injector.
-    
+
 3. Verify all pods are running
     ```
     kubectl get pods -n edgemicro-system
