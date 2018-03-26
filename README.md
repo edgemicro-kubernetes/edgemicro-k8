@@ -25,7 +25,7 @@ This project brings native api management to the microservices development on ku
      ```
      gcloud container clusters get-credentials <cluster-name> --zone <zone> --project <project-name>
      ```
-   - Grant cluster admin permissions to the current user (admin permissions are required to create the necessary RBAC rules for efdgemicrok8):
+   - Grant cluster admin permissions to the current user (admin permissions are required to create the necessary RBAC rules for edgemicrok8):
      ```
      kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
      ```
