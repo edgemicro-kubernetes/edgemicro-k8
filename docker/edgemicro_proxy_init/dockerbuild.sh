@@ -2,12 +2,16 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [ $# -ne 1 ]; then 
-	echo "Please Provide Verson Number to build"
+if [ $# -ne 2 ]; then 
+	echo "Please provide edgemicro_proxy_init version and GCP project id"
 fi
 
 version=$1
+project_id=$2
 
 docker build -t edgemicro_proxy_init:$version $DIR
-docker tag edgemicro_proxy_init:$version edgemicrok8/edgemicro_proxy_init:$version
-docker push edgemicrok8/edgemicro_proxy_init:$version
+
+if [ $# -eq 2 ]; then
+  docker tag edgemicro_proxy_init:$version gcr.io/$project_id/edgemicro:$version
+  docker push gcr.io/$project_id/edgemicro:$version
+fi

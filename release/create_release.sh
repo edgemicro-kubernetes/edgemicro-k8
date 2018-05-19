@@ -23,7 +23,7 @@ usage() {
   echo "   -k, --git-key              * Git Key. "
   echo "   -u, --git-user             * Git User. "
   echo "   -r, --release-version      * Release Version. "
-
+  echo "   -p, --project-id           * GCP Project Id. "
   echo "${reset}"
 
   exit 1
@@ -53,6 +53,10 @@ case $param in
                        shift # past argument
                        shift # past value
                        ;;
+        -p|--project-id )   RELEASE_VERSION=$2
+                       shift # past argument
+                       shift # past value
+                       ;;					   
         -h|*         ) shift
                        shift
                        usage
@@ -83,6 +87,11 @@ do
     read  -p "${blue}Release Version :${reset}" RELEASE_VERSION
 done
 
+while [ "$PROJECT_ID" = "" ]
+do
+    read  -p "${blue}Project Id :${reset}" PROJECT_ID
+done
+
 while [ "$BUILD_DOCKER" = "" ]
 do
 	read  -p "${blue}Do you want to build docker images[Y/n] :${reset}" BUILD_DOCKER
@@ -94,11 +103,11 @@ done
 #Build and deploy all docker images with the version supplied
 
 if [[ "$BUILD_DOCKER" == "y" ]]; then
-	../docker/edgemicro/dockerbuild.sh $VERSION
-	../docker/edgemicro_sidecar_injector/dockerbuild.sh $VERSION
-	../docker/edgemicro_apigee_setup/dockerbuild.sh $VERSION
-	../docker/edgemicro_proxy_init/dockerbuild.sh $VERSION
-	../docker/helloworld/dockerbuild.sh $VERSION
+	../docker/edgemicro/dockerbuild.sh $VERSION $PROJECT_ID
+	../docker/edgemicro_sidecar_injector/dockerbuild.sh $VERSION $PROJECT_ID
+	../docker/edgemicro_apigee_setup/dockerbuild.sh $VERSION $PROJECT_ID
+	../docker/edgemicro_proxy_init/dockerbuild.sh $VERSION $PROJECT_ID
+	../docker/helloworld/dockerbuild.sh $VERSION $PROJECT_ID
 fi
 
 
