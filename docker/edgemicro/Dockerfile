@@ -4,6 +4,7 @@ FROM centos:centos7
 RUN yum install epel-release -y && yum install nodejs -y
 RUN groupadd apigee
 RUN useradd apigee -g apigee -m -d /opt/apigee
+RUN yum clean all
 RUN npm install -g edgemicro
 RUN su - apigee -c "edgemicro init"
 
@@ -15,8 +16,8 @@ COPY entrypoint.sh /tmp
 COPY proxies.yaml /tmp
 RUN chmod +x /tmp/entrypoint.sh
 # copy tls files if needed
-# COPY key.pem /root/.edgemicro
-# COPY cert.pem /root/.edgemicro
+# COPY key.pem /opt/apigee/.edgemicro
+# COPY cert.pem /opt/apigee/.edgemicro
 EXPOSE 8000
 EXPOSE 8443
 ENTRYPOINT ["/tmp/entrypoint.sh"]
