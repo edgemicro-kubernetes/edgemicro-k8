@@ -53,7 +53,7 @@ case $param in
                        shift # past argument
                        shift # past value
                        ;;
-        -p|--project-id )   RELEASE_VERSION=$2
+        -p|--project-id )   PROJECT_ID=$2
                        shift # past argument
                        shift # past value
                        ;;					   
