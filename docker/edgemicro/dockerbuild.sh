@@ -11,6 +11,8 @@ fi
 version=$1
 project_id=$2
 
+docker build -t edgemicro:$version $DIR
+
 if [ $# -eq 2 ]; then
   docker tag edgemicro:$version gcr.io/$project_id/edgemicro:$version
   docker push gcr.io/$project_id/edgemicro:$version

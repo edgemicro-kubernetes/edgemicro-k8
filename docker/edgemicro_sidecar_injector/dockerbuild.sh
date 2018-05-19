@@ -11,6 +11,6 @@ project_id=$2
 docker pull docker.io/istio/sidecar_injector:0.6.0
 
 if [ $# -eq 2 ]; then
-  docker tag docker.io/istio/sidecar_injector:0.6.0 gcr.io/$project_id/edgemicro:$version
-  docker push gcr.io/$project_id/edgemicro:$version
+  docker tag docker.io/istio/sidecar_injector:0.6.0 gcr.io/$project_id/sidecar_injector:$version
+  docker push gcr.io/$project_id/sidecar_injector:$version
 fi
