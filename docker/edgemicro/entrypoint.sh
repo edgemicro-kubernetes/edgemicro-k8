@@ -14,12 +14,12 @@ proxy_name=edgemicro_$POD_NAME
 product_name=$proxy_name-product
 
 
-if [ ${EDGEMICRO_CONFIG} != "" ]; then
+if [[ ${EDGEMICRO_CONFIG} != "" ]]; then
 	echo ${EDGEMICRO_CONFIG} >> /tmp/test.txt
 	echo ${EDGEMICRO_CONFIG} | base64 --decode > /opt/apigee/.edgemicro/$EDGEMICRO_ORG-$EDGEMICRO_ENV-config.yaml
 	# Decorate Proxy with the proxy name
   sed -i.bak s/proxy_name/${proxy_name}/g /tmp/proxies.yaml
-  if [ ${EDGEMICRO_DECORATOR} != "" ]; then
+  if [[ ${EDGEMICRO_DECORATOR} != "" ]]; then
          sed -i.bak '/edgemicro:/r /tmp/proxies.yaml' /opt/apigee/.edgemicro/$EDGEMICRO_ORG-$EDGEMICRO_ENV-config.yaml
   fi
   chown apigee:apigee /opt/apigee/.edgemicro/*
@@ -41,7 +41,7 @@ su - apigee -m -c "$commandString"
 my_handler() {
   echo "my_handler" >> /tmp/entrypoint.log
   su - apigee -m -c "cd /opt/apigee && edgemicro stop"
-  if [ ${EDGEMICRO_DECORATOR} != "" ]; then
+  if [[ ${EDGEMICRO_DECORATOR} != "" ]]; then
       #Attempt deleting the proxy here
       curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apiproducts/${product_name}
       curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/environments/${EDGEMICRO_ENV}/apis/${proxy_name}/revisions/1/deployments
@@ -54,7 +54,7 @@ my_handler() {
 term_handler() {
   echo "term_handler" >> /tmp/entrypoint.log
   su - apigee -m -c "cd /opt/apigee && edgemicro stop"
-  if [ ${EDGEMICRO_DECORATOR} != "" ]; then
+  if [[ ${EDGEMICRO_DECORATOR} != "" ]]; then
       curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apiproducts/${product_name}
       curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/environments/${EDGEMICRO_ENV}/apis/${proxy_name}/revisions/1/deployments
       curl -v -X DELETE -u $EDGEMICRO_ADMINEMAIL:$EDGEMICRO_ADMINPASSWORD -H "Content-Type:application/x-www-form-urlencoded" ${EDGEMICRO_MGMTURL}/v1/organizations/${EDGEMICRO_ORG}/apis/${proxy_name}
