@@ -18,8 +18,8 @@ usage() {
 
   echo "${blue}Usage: $0 [option...]" >&2
   echo
-  echo "   -v, --build-version        * Build Version. "
-  echo "   -d, -- build-docker        * Build Docker? y/n. "
+  echo "   -v, --build-version        * Build Docker Image Version "
+  echo "   -d, -- build-docker        * Do you want to Build Docker images and push to registry? y/n. "
   echo "   -k, --git-key              * Git Key. "
   echo "   -u, --git-user             * Git User. "
   echo "   -r, --release-version      * Release Version. "
@@ -66,7 +66,7 @@ done
 
 while [ "$VERSION" = "" ]
 do
-    read  -p "${blue}Build Version [latest]:${reset}" VERSION
+    read  -p "${blue}Build Docker Image Version [latest]:${reset}" VERSION
     if [[ "$VERSION" = "" ]]; then
      VERSION="latest"
     fi
@@ -94,7 +94,7 @@ done
 
 while [ "$BUILD_DOCKER" = "" ]
 do
-	read  -p "${blue}Do you want to build docker images[Y/n] :${reset}" BUILD_DOCKER
+	read  -p "${blue}Do you want to Build Docker images and push to registry?[Y/n] :${reset}" BUILD_DOCKER
 
 	if [[ "$BUILD_DOCKER" = "" ]]; then
 		BUILD_DOCKER="y"
