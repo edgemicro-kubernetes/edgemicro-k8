@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: helloworld
-        image: docker.io/edgemicrok8/helloworld
+        image: gcr.io/apigee-microgateway/helloworld
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8081

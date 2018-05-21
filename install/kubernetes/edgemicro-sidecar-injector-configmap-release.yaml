@@ -11,7 +11,7 @@ data:
     template: |-
       initContainers:
       - name: edgemicro-apigee
-        image: docker.io/edgemicrok8/edgemicro_apigee_setup:latest
+        image: gcr.io/apigee-microgateway/edgemicro_apigee_setup:latest
         env:
         - name: EDGEMICRO_ORG
           valueFrom:
@@ -78,7 +78,7 @@ data:
         imagePullPolicy: Always
         resources: {}
       - name: edgemicro-init
-        image: docker.io/edgemicrok8/edgemicro_proxy_init:latest
+        image: gcr.io/apigee-microgateway/edgemicro_proxy_init:latest
         args:
         - "-p"
         - "8000"
@@ -91,7 +91,7 @@ data:
         imagePullPolicy: Always
       containers:
       - name: edge-microgateway
-        image: docker.io/edgemicrok8/edgemicro:latest
+        image: gcr.io/apigee-microgateway/edgemicro:latest
         ports:
         - containerPort: 8000
         env:
