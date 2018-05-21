@@ -1,7 +1,9 @@
 FROM centos:centos7
 #FROM node:slim
 
-RUN yum install epel-release -y && yum install nodejs -y
+#RUN yum install epel-release -y && yum install nodejs -y
+RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
+RUN yum install -y nodejs
 RUN groupadd apigee
 RUN useradd apigee -g apigee -m -d /opt/apigee
 RUN yum clean all
