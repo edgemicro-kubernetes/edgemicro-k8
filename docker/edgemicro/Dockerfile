@@ -5,6 +5,7 @@ RUN yum install epel-release -y && yum install nodejs -y
 RUN groupadd apigee
 RUN useradd apigee -g apigee -m -d /opt/apigee
 RUN yum clean all
+RUN rm -rf /var/cache/yum
 RUN npm install -g edgemicro
 RUN su - apigee -c "edgemicro init"
 
