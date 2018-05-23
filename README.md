@@ -160,7 +160,7 @@ edge-microgateway   NodePort    10.55.242.99   <none>        8000:31984/TCP   5h
 kubernetes          ClusterIP   10.55.240.1    <none>        443/TCP          6h
 ```
 
-Get Ingress controller
+- Get Ingress controller
 ```
 kubectl get ing -o wide
 ```
@@ -169,7 +169,7 @@ kubectl get ing -o wide
 NAME                HOSTS     ADDRESS         PORTS     AGE
 edge-microgateway   *         35.225.100.55   80        5h
 ```
-
+- Get Ingress IP
 
 ```
 export GATEWAY_IP=$(kubectl describe ing edge-microgateway --namespace default | grep "Address" | cut -d ':' -f2 | tr -d "[:space:]")
@@ -180,23 +180,22 @@ echo "Call with no API Key:"
 curl $GATEWAY_IP:80/hello;
 ```
 
-Get ClusterIP for helloworld service
+- Get ClusterIP for helloworld service
+
 ```
 kubectl get services helloworld
 ```
+
+
 ```
 NAME         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 helloworld   NodePort   10.55.254.255   <none>        8081:30329/TCP   3m
 ```
 
-Record the clusterIP to generate the edgemicro api proxy in Edge.
+- Record the clusterIP to generate the edgemicro api proxy in Edge.Follow instructions [here](https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge).
 
+- Call API 
 ```
-Follow instructions [here](https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge).
-
-```
-
-
 echo "Call with API Key:"
 curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80/hello/echo;echo
 ```
