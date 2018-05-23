@@ -113,13 +113,82 @@ system:
     - Note down the key and secret generated. It also generates org-env-config.yaml file.
 
 
-#### Deploy Edgemicro as Service
-Skip this step if you are deploying Edgemicro as Sidecar. Refer to sections below for more details.
+## Edgemicro as Service Pattern
 
+#### Deploy Edgemicro
+
+- Use edgemicroctl to deploy edgemicro in a kubernetes cluster
 ```
 kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-secret> -conf=<file path of org-env-config.yaml> -img=gcr.io/apigee-microgateway/edgemicro:2.5.16)
+```
+
+
+- Setup nginx ingress controller for edgemicro
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: edge-microgateway-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: edge-microgateway
+          servicePort: 8000
+EOF
+```
+
+#### Deploy Application 
+
+- Deploy any service without any ingress controller.
+```
+kubectl apply -f samples/helloworld/hellworld-service.yaml
+```
+
+#### Verification Steps 
 
 ```
+kubectl get services -n default
+```
+```
+NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+edge-microgateway   NodePort    10.55.242.99   <none>        8000:31984/TCP   5h
+kubernetes          ClusterIP   10.55.240.1    <none>        443/TCP          6h
+```
+
+Get Ingress controller
+```
+kubectl get ing -o wide
+```
+
+```
+NAME                HOSTS     ADDRESS         PORTS     AGE
+edge-microgateway   *         35.225.100.55   80        5h
+```
+
+
+```
+export GATEWAY_IP=$(kubectl describe ing gateway --namespace default | grep "Address" | cut -d ':' -f2 | tr -d "[:space:]")
+
+echo $GATEWAY_IP
+
+echo "Call with no API Key:"
+curl $GATEWAY_IP:80;
+```
+Go to Edge UI and follow instructions here https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge.
+
+```
+echo "Call with API Key:"
+curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80;echo
+```
+
+
+## Sidecar Pattern
 
 #### Deploy Application
 
