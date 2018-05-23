@@ -6,10 +6,10 @@ Edge Microgateway can be deployed as a service or as a sidecar gateway in front 
 Developers faces challenges in exposing their microservices and rely on API Management providers for exposing,securing and managing their apis.
 This project brings native api management to the microservices development on kubernetes platform.
 
-# Service Pattern 
-![Service Pattern](/docs/images/service-arch.png)
-# Sidecar Pattern 
-![Sidecar Pattern](/docs/images/arch.png)
+# Edgemicro as Service 
+![Edgemicro as Service](/docs/images/service-arch.png)
+# Edgemicro as Sidecar 
+![Edgemicro as Sidecar](/docs/images/arch.png)
 
 ## Quick Start
 
@@ -113,7 +113,7 @@ system:
     - Note down the key and secret generated. It also generates org-env-config.yaml file.
 
 
-## Edgemicro as Service Pattern
+## Edgemicro as Service
 
 #### Deploy Edgemicro
 
@@ -188,7 +188,7 @@ curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80;echo
 ```
 
 
-## Sidecar Pattern
+## Edgemicro as Sidecar
 
 #### Deploy Application
 
