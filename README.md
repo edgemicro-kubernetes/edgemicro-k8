@@ -192,12 +192,12 @@ NAME         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 helloworld   NodePort   10.55.254.255   <none>        8081:30329/TCP   3m
 ```
 
-- Record the clusterIP to generate the edgemicro api proxy in Edge.Follow instructions [here](https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge).
+- Record the clusterIP to generate the edgemicro api proxy in Edge. For ex - target IP in this case would be http://10.55.254.255:8081. Follow instructions [here](https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge) to finish apigee setup.
 
 - Call API 
 ```
 echo "Call with API Key:"
-curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80/hello/echo;echo
+curl - 'x-api-key:your-edge-api-key' $GATEWAY_IP:80/hello/echo;echo
 ```
 
 
