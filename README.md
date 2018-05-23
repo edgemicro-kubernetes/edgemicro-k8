@@ -2,18 +2,20 @@
 
 ## Overview
 
-This project allows you to install Apigee Edge Microgateway as a sidecar gateway in front of your services deployed in kubernetes cluster. Developers faces challenges in exposing their microservices and rely on API Management providers for exposing,securing and managing their apis.
+Edge Microgateway can be deployed as a service or as a sidecar gateway in front og your services deployed in kubernetes cluster.
+Developers faces challenges in exposing their microservices and rely on API Management providers for exposing,securing and managing their apis.
 This project brings native api management to the microservices development on kubernetes platform.
 
-# Architecture
-![Architecture](/docs/images/arch.png)
-
+# Service Pattern 
+![Service Pattern](/docs/images/service-arch.png)
+# Sidecar Pattern 
+![Sidecar Pattern](/docs/images/arch.png)
 
 ## Quick Start
 
 ### Prerequisites
 
-* Kubernetes version 1.9 or greater
+* Kubernetes version 1.8+ or 1.9+(Automatic Sidecar)
 * Kubernetes CLI kubectl v1.9 or greater
 * Cluster with atleast 3 nodes having 2 VCPU each.
 * Minikube - Coming soon ...
@@ -40,7 +42,7 @@ This project brings native api management to the microservices development on ku
 2. It extracts the package in the current location with a folder named edgemicro-k8-<os>-<arch>
     * Installation .yaml files for Kubernetes in install/
     * Sample applications in samples/
-    * The edgemicroctl client binary in the bin/ directory. edgemicroctl is used when manually injecting Edgemicro as a sidecar gateay.
+    * The edgemicroctl client binary in the bin/ directory. edgemicroctl is used when manually injecting Edgemicro as a sidecar gateway or Service.
 
 3.  Change directory to edgemicro-k8 package. For example, if the package is edgemicro-k8-0.1-darwinamd64
     ```
@@ -51,13 +53,13 @@ system:
     ```
     export PATH=$PWD/bin:$PATH
     ```
-5. Install the base edgemicro-k8 setup. This will create edgemicro-system namespaces and create cluster roles for edgemicro sidecar gateway.
+5. Install the base edgemicro-k8 setup. This will create edgemicro-system namespaces and create cluster roles for edgemicro sidecar and Service.
 
     ```
     kubectl apply -f install/kubernetes/edgemicro.yaml
     ```
 
-6. if you are using GKE, confgure nginx ingress controller.
+6. Confgure nginx ingress controller.
     ```
     kubectl apply -f install/kubernetes/edgemicro-nginx-gke.yaml
     ```
@@ -110,7 +112,16 @@ system:
         ```
     - Note down the key and secret generated. It also generates org-env-config.yaml file.
 
-#### Deploying Application
+
+#### Deploy Edgemicro as Service
+Skip this step if you are deploying Edgemicro as Sidecar. Refer to sections below for more details.
+
+```
+kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-secret> -conf=<file path of org-env-config.yaml> -img=gcr.io/apigee-microgateway/edgemicro:2.5.16)
+
+```
+
+#### Deploy Application
 
 You can now deploy your own application or one of the sample applications provided with the installation like helloworld. Note: the application must use HTTP/1.1 or HTTP/2.0 protocol for all its HTTP traffic because HTTP/1.0 is not supported.
 
@@ -119,7 +130,7 @@ If you started the edgemicro-sidecar-injector, as shown above, you can deploy th
 If you do not have the edgemicro-sidecar-injector installed, you must use edgemictoctl to manuallly inject Edgemicro containers in your application pods before deploying them:
 
 ```
-kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-sec> -user=<apigee-user> -pass=<apigee-password> -conf=<file path of org-env-config.yaml> -svc=<your-app-spec>.yaml)
+kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-secret> -user=<apigee-user> -pass=<apigee-password> -conf=<file path of org-env-config.yaml> -svc=<your-app-spec>.yaml)
 ```
 
 ### Helloworld sample
