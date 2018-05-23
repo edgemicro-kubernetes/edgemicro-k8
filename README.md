@@ -178,7 +178,9 @@ echo $GATEWAY_IP
 
 echo "Call with no API Key:"
 curl $GATEWAY_IP:80/hello;
+```
 
+Get ClusterIP for helloworld service
 ```
 kubectl get services helloworld
 ```
