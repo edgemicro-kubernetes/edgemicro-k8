@@ -172,18 +172,31 @@ edge-microgateway   *         35.225.100.55   80        5h
 
 
 ```
-export GATEWAY_IP=$(kubectl describe ing gateway --namespace default | grep "Address" | cut -d ':' -f2 | tr -d "[:space:]")
+export GATEWAY_IP=$(kubectl describe ing edge-microgateway --namespace default | grep "Address" | cut -d ':' -f2 | tr -d "[:space:]")
 
 echo $GATEWAY_IP
 
 echo "Call with no API Key:"
-curl $GATEWAY_IP:80;
+curl $GATEWAY_IP:80/hello;
+
+```
+kubectl get services helloworld
+```
+```
+NAME         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+helloworld   NodePort   10.55.254.255   <none>        8081:30329/TCP   3m
+```
+
+Record the clusterIP to generate the edgemicro api proxy in Edge.
+
 ```
 Follow instructions [here](https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge).
 
 ```
+
+
 echo "Call with API Key:"
-curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80;echo
+curl -H 'x-api-key:your-edge-api-key' $GATEWAY_IP:80/hello/echo;echo
 ```
 
 
