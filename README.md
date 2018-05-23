@@ -180,7 +180,7 @@ echo $GATEWAY_IP
 echo "Call with no API Key:"
 curl $GATEWAY_IP:80;
 ```
-Go to Edge UI and follow instructions here https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge.
+Follow instructions [here](https://docs.apigee.com/api-platform/microgateway/2.5.x/setting-and-configuring-edge-microgateway#part2createentitiesonapigeeedge).
 
 ```
 echo "Call with API Key:"
