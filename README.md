@@ -106,7 +106,7 @@ system:
         npm install edgemicro -g
         edgemicro init
         ```
-    - Configure Edgemicro to get Key and Secret.
+    - Configure Edgemicro to get Key and Secret. You may skip this step if you are doing automatic sidecar injection. The script can generate for you.
         ```
         edgemicro configure -o <org> -e <env> -u <user> -p <password>
         ```
@@ -117,11 +117,10 @@ system:
 
 #### Deploy Edgemicro
 
-- Use edgemicroctl to deploy edgemicro in a kubernetes cluster
+- Use edgemicroctl to deploy edgemicro in a kubernetes cluster. It uses the key and secret generated  above .
 ```
 kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-secret> -conf=<file path of org-env-config.yaml> -img=gcr.io/apigee-microgateway/edgemicro:2.5.16)
 ```
-
 
 - Setup nginx ingress controller for edgemicro
 ```
@@ -145,7 +144,7 @@ EOF
 
 #### Deploy Application 
 
-- Deploy any service without any ingress controller.
+- Deploy your service without any ingress controller.
 ```
 kubectl apply -f samples/helloworld/hellworld-service.yaml
 ```
@@ -198,9 +197,13 @@ If you started the edgemicro-sidecar-injector, as shown above, you can deploy th
 
 If you do not have the edgemicro-sidecar-injector installed, you must use edgemictoctl to manuallly inject Edgemicro containers in your application pods before deploying them:
 
+
 ```
 kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=<edgemicro-secret> -user=<apigee-user> -pass=<apigee-password> -conf=<file path of org-env-config.yaml> -svc=<your-app-spec>.yaml)
 ```
+
+Use the svc parameter to pass your service file. See the helloworld sample below for demonstration.
+
 
 ### Helloworld sample
 [here](/docs/helloworld.md)
@@ -211,6 +214,34 @@ kubectl apply -f <(edgemicroctl -org=<org> -env=<env> -key=<edgemicro-key> -sec=
 ### Running Bookinfo sample
 [here](/docs/bookinfo.md)
 
+### Understanding edgemicroctl
+
+```
+Usage: edgemicroctl -org=<orgname> -env=<envname> -user=<username> -pass=<password> -conf=<conf file>
+
+Options:
+org  = Apigee Edge Organization name (mandatory)
+env  = Apigee Edge Environment name (mandatory)
+key  = Apigee Edge Microgateway Key (mandatory)
+sec  = Apigee Edge Microgateway Secret (mandatory)
+conf = Apigee Edge Microgateway configuration file (mandatory)
+
+For Sidecar deployment
+user = Apigee Edge Username (mandatory)
+pass = Apigee Edge Password (mandatory)
+svc  = Kubernetes Service configuration file (mandatory)
+
+For Pod deployment
+img  = Apigee Edge Microgateway docker image (mandatory)
+
+Other options:
+murl   = Apigee Edge Management API Endpoint; Default is api.enterprise.apigee.com
+debug  = Enable debug mode (default: false)
+
+
+Example for Sidecar: edgemicroctl -org=trial -env=test -user=trial@apigee.com -pass=Secret123 -conf=trial-test-config.yaml -svc=myservice.yaml -key=xxxx -sec=xxxx
+Example for Pod: edgemicroctl -org=trial -env=test -conf=trial-test-config.yaml -svc=myservice.yaml -key=xxxx -sec=xxxx
+```
 
 ### Assumptions
 - It uses app labels in services to identify the deployment. Please ensure you define your services with label app. Refer to examples in helloworld and bookinfo example.
