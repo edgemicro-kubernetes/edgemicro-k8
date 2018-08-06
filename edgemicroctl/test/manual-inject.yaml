@@ -1,0 +1,205 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld
+  labels:
+    app: helloworld
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8081
+    name: http
+  selector:
+    app: helloworld
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mgwsecret
+type: Opaque
+data:
+  mgorg: Z2FjY2VsZXJhdGU1
+  mgenv: dGVzdA==
+  mgkey: YmM1MzQzNzQ2OGNhZGRjOGE3NTM1YmExNTI5MWY4ZDdhODRkNGUxNWVhNTBhOGRlYjNlNjUwNjMzMjMxOWZlOA==
+  mgsecret: YTA3YTliYTFiY2U4YzU2MGQ2NjQ1YTc2ZTM0NjE4Njc5NjViZTExMmQ1M2U5ZDhkZjQzNDdmY2IwYjMzNzg2NA==
+  mgconfig: WldSblpWOWpiMjVtYVdjNkNpQWdZbTl2ZEhOMGNtRndPaUErTFFvZ0lDQWdhSFIwY0hNNkx5OWxaR2RsYldsamNtOXpaWEoyYVdObGN5NWhjR2xuWldVdWJtVjBMMlZrWjJWdGFXTnlieTlpYjI5MGMzUnlZWEF2YjNKbllXNXBlbUYwYVc5dUwyZGhZMk5sYkdWeVlYUmxOUzlsYm5acGNtOXViV1Z1ZEM5MFpYTjBDaUFnYW5kMFgzQjFZbXhwWTE5clpYazZJQ2RvZEhSd2N6b3ZMMmRoWTJObGJHVnlZWFJsTlMxMFpYTjBMbUZ3YVdkbFpTNXVaWFF2WldSblpXMXBZM0p2TFdGMWRHZ3ZjSFZpYkdsalMyVjVKd29nSUcxaGJtRm5aVzFsYm5SVmNtazZJQ2RvZEhSd2N6b3ZMMkZ3YVM1bGJuUmxjbkJ5YVhObExtRndhV2RsWlM1amIyMG5DaUFnZG1GMWJIUk9ZVzFsT2lCdGFXTnliMmRoZEdWM1lYa0tJQ0JoZFhSb1ZYSnBPaUFuYUhSMGNITTZMeThsY3kwbGN5NWhjR2xuWldVdWJtVjBMMlZrWjJWdGFXTnlieTFoZFhSb0p3b2dJR0poYzJWVmNtazZJRDR0Q2lBZ0lDQm9kSFJ3Y3pvdkwyVmtaMlZ0YVdOeWIzTmxjblpwWTJWekxtRndhV2RsWlM1dVpYUXZaV1JuWlcxcFkzSnZMeVZ6TDI5eVoyRnVhWHBoZEdsdmJpOGxjeTlsYm5acGNtOXViV1Z1ZEM4bGN3b2dJR0p2YjNSemRISmhjRTFsYzNOaFoyVTZJRkJzWldGelpTQmpiM0I1SUhSb1pTQm1iMnhzYjNkcGJtY2djSEp2Y0dWeWRIa2dkRzhnZEdobElHVmtaMlVnYldsamNtOGdZV2RsYm5RZ1kyOXVabWxuQ2lBZ2EyVjVVMlZqY21WMFRXVnpjMkZuWlRvZ1ZHaGxJR1p2Ykd4dmQybHVaeUJqY21Wa1pXNTBhV0ZzY3lCaGNtVWdjbVZ4ZFdseVpXUWdkRzhnYzNSaGNuUWdaV1JuWlNCdGFXTnlid29nSUhCeWIyUjFZM1J6T2lBbmFIUjBjSE02THk5bllXTmpaV3hsY21GMFpUVXRkR1Z6ZEM1aGNHbG5aV1V1Ym1WMEwyVmtaMlZ0YVdOeWJ5MWhkWFJvTDNCeWIyUjFZM1J6SndwbFpHZGxiV2xqY204NkNpQWdjRzl5ZERvZ09EQXdNQW9nSUcxaGVGOWpiMjV1WldOMGFXOXVjem9nTVRBd01Bb2dJR052Ym1acFoxOWphR0Z1WjJWZmNHOXNiRjlwYm5SbGNuWmhiRG9nTmpBd0NpQWdiRzluWjJsdVp6b0tJQ0FnSUd4bGRtVnNPaUJsY25KdmNnb2dJQ0FnWkdseU9pQXZkbUZ5TDNSdGNBb2dJQ0FnYzNSaGRITmZiRzluWDJsdWRHVnlkbUZzT2lBMk1Bb2dJQ0FnY205MFlYUmxYMmx1ZEdWeWRtRnNPaUF5TkFvZ0lIQnNkV2RwYm5NNkNpQWdJQ0J6WlhGMVpXNWpaVG9LSUNBZ0lDQWdMU0J2WVhWMGFBcG9aV0ZrWlhKek9nb2dJSGd0Wm05eWQyRnlaR1ZrTFdadmNqb2dkSEoxWlFvZ0lIZ3RabTl5ZDJGeVpHVmtMV2h2YzNRNklIUnlkV1VLSUNCNExYSmxjWFZsYzNRdGFXUTZJSFJ5ZFdVS0lDQjRMWEpsYzNCdmJuTmxMWFJwYldVNklIUnlkV1VLSUNCMmFXRTZJSFJ5ZFdVS2IyRjFkR2c2Q2lBZ1lXeHNiM2RPYjBGMWRHaHZjbWw2WVhScGIyNDZJR1poYkhObENpQWdZV3hzYjNkSmJuWmhiR2xrUVhWMGFHOXlhWHBoZEdsdmJqb2dabUZzYzJVS0lDQjJaWEpwWm5sZllYQnBYMnRsZVY5MWNtdzZJQ2RvZEhSd2N6b3ZMMmRoWTJObGJHVnlZWFJsTlMxMFpYTjBMbUZ3YVdkbFpTNXVaWFF2WldSblpXMXBZM0p2TFdGMWRHZ3ZkbVZ5YVdaNVFYQnBTMlY1SndwaGJtRnNlWFJwWTNNNkNpQWdkWEpwT2lBK0xRb2dJQ0FnYUhSMGNITTZMeTlsWkdkbGJXbGpjbTl6WlhKMmFXTmxjeTVoY0dsblpXVXVibVYwTDJWa1oyVnRhV055Ynk5aGVIQjFZbXhwYzJobGNpOXZjbWRoYm1sNllYUnBiMjR2WjJGalkyVnNaWEpoZEdVMUwyVnVkbWx5YjI1dFpXNTBMM1JsYzNRS0lDQmlkV1ptWlhKVGFYcGxPaUF4TURBd01Bb2dJR0poZEdOb1UybDZaVG9nTlRBd0NpQWdabXgxYzJoSmJuUmxjblpoYkRvZ05UQXdNQW89Cg==
+  mgmgmturl: aHR0cHM6Ly9hcGkuZW50ZXJwcmlzZS5hcGlnZWUuY29t
+  mgadminemail: cmFqZXNobWlzaHJhQGFwaWdlZS5jb20=
+  mgadminpassword: UmV2YWFudDEw
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: helloworld
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+      creationTimestamp: null
+      labels:
+        app: helloworld
+    spec:
+      containers:
+      - name: helloworld
+        image: docker.io/edgemicrok8/helloworld
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
+      - name: edge-microgateway
+        image: docker.io/edgemicrok8/edgemicro:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: EDGEMICRO_ORG
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgorg
+        - name: EDGEMICRO_ENV
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgenv
+        - name: EDGEMICRO_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgkey
+        - name: EDGEMICRO_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgsecret
+        - name: EDGEMICRO_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgconfig
+        - name: EDGEMICRO_MGMTURL
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgmgmturl
+        - name: EDGEMICRO_ADMINEMAIL
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgadminemail
+        - name: EDGEMICRO_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgadminpassword
+        - name: EDGEMICRO_CONFIG_DIR
+          value: /opt/apigee/.edgemicro
+        - name: EDGEMICRO_DECORATOR
+          value: "1"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: SERVICE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app']
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        imagePullPolicy: Always
+        resources: {}
+      initContainers:
+      - name: edgemicro-apigee
+        image: docker.io/edgemicrok8/edgemicro_apigee_setup:latest
+        env:
+        - name: EDGEMICRO_ORG
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgorg
+        - name: EDGEMICRO_ENV
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgenv
+        - name: EDGEMICRO_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgkey
+        - name: EDGEMICRO_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgsecret
+        - name: EDGEMICRO_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgconfig
+        - name: EDGEMICRO_MGMTURL
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgmgmturl
+        - name: EDGEMICRO_ADMINEMAIL
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgadminemail
+        - name: EDGEMICRO_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mgwsecret
+              key: mgadminpassword
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: SERVICE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app']
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+        resources: {}
+        imagePullPolicy: Always
+      - name: edgemicro-init
+        image: docker.io/edgemicrok8/edgemicro_proxy_init:latest
+        args:
+        - "-p"
+        - "8000"
+        - "-u"
+        - "1001"
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+        resources: {}
+        imagePullPolicy: Always
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: edmicro-proxy
+      - name: edgemicro-certs
+        secret:
+          optional: true
+          secretName: edgemicro.default
+
+---

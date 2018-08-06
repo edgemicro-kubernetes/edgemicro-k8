@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld
+  labels:
+    app: helloworld
+spec:
+  type: NodePort
+  ports:
+  - port: 8081
+    name: http
+    targetPort: 8081
+    protocol: TCP
+  selector:
+    app: helloworld
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: helloworld
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: helloworld
+    spec:
+      containers:
+      - name: helloworld
+        image: gcr.io/apigee-microgateway/helloworld
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
