@@ -6,9 +6,27 @@ builds:
     goos:
       - linux
       - darwin
-      - windows
-    goarch:
-      - 386
-      - amd64
-      - arm
-      - arm6
+archive:
+  name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+  format_overrides:
+  - goos: windows
+    format: zip
+  files:
+    - LICENSE
+    - README.md
+    - NOTICE
+    - samples/helloworld/*.yaml
+    - samples/httpbin/*.yaml
+    - install/kubernetes/*.yaml
+    - install/kubernetes/config/*.yaml
+git:
+  short_hash: true
+release:
+  draft: true
+  prerelease: true
