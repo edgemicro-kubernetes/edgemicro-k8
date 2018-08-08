@@ -17,14 +17,6 @@ archive:
   format_overrides:
   - goos: windows
     format: zip
-  files:
-    - LICENSE
-    - README.md
-    - NOTICE
-    - samples/helloworld/*.yaml
-    - samples/httpbin/*.yaml
-    - install/kubernetes/*.yaml
-    - install/kubernetes/config/*.yaml
 git:
   short_hash: true
 release:
